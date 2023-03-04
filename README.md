@@ -12,7 +12,7 @@
 ### Disclaimer
 The current software was developed as part of the 3rd written assignment for the PLH12 course of the Hellenic Open University.
 
-### Security
+### Security Risks
 Please note that for this software you need to change the default password for the database.
 
 ## Software Development Team
