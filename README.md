@@ -1,5 +1,5 @@
 ## Assignment 3 for PLH23
-![](Screenshots\index.png)
+![](Screenshots/index.png)
 
 ### Installation 
 1) Download and install XAMPP for your system ```https://www.apachefriends.org/download.html```
