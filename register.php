@@ -86,43 +86,43 @@
                 $counties[$row['CountyID']] = $row['CountyName'];
             }
 
-            // Αντλούμε το UserID της τελευταίας εγγραφής
+            // Αντλούμε το UserID του τελευταίου χρήστη
             $sql_userid = "SELECT MAX(UserID) AS max_id FROM users";
+            $result_userid = $conn->query($sql_userid);
+            $row = $result_userid->fetch_assoc();
+            $max_id = $row['max_id'];
+            $user_id = $max_id + 1;
 
         ?>
         
         <!-- Φόρμα καταχώρησης χρήστη -->
-        <form action="submit-offer.php" method="post" >
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="BrandName">
                 <span class="left-item"> Επωνυμία Επιχείρησης: </span>
-                <span class="center-item"> <input type="text" required maxlength="120"> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="text" required maxlength="120" name='BrandName'> </span>
             </div>
             <div class="VAT">
                 <span class="left-item"> A.Φ.Μ.: </span>
-                <span class="center-item"> <input type="number" required maxlength="9"> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="number" required maxlength="9" minlength="9" name='VAT'> </span>
             </div>
             <div class="Address">
                 <span class="left-item"> Διεύθυνση: </span>
-                <span class="center-item"> <input type="text" required maxlength="120"> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="text" required maxlength="120" name='Address'> </span>
             </div>
             <div class="Municipality">
                 <span class="left-item"> Δήμος: </span>
-                <span class="center-item">
-                    <select id="dropdown-menu1"> <!-- Χρηση Dropdown Menu για τους Δήμους -->
+                <span class="right-item">
+                    <select id="dropdown-menu1" name='Municipality'> <!-- Χρηση Dropdown Menu για τους Δήμους -->
                         <?php foreach ($municipalities as $id => $name): ?>
                         <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
                         <?php endforeach; ?>
                     </select>
                 </span>
-                <span class="right-item"></span>
             </div>
             <div class="County">
                 <span class="left-item"> Νομός: </span>
-                <span class="center-item">
-                    <select id="dropdown-menu2"> <!-- Χρηση Dropdown Menu για τους Νομούς -->
+                <span class="right-item">
+                    <select id="dropdown-menu2" name='County'> <!-- Χρηση Dropdown Menu για τους Νομούς -->
                         <?php foreach ($counties as $id => $name): ?>
                         <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
                         <?php endforeach; ?>
@@ -132,29 +132,25 @@
             </div>
             <div class="Email">
                 <span class="left-item"> <label for="password"> Email: </label></span>
-                <span class="center-item"> <input type="email" required> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="email" name='Email' required> </span>
             </div>
             <div class="Username">
                 <span class="left-item"> <label for="password"> Username: </label></span>
-                <span class="center-item"> <input type="text" required minlength="6"> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="text" name='Username' required minlength="6"> </span>
             </div>
             <div class="Password">
                 <span class="left-item"> <label for="password"> Κωδικός: </label> </span>
-                <span class="center-item"> <input type="password" required minlength="8"> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="password" name='Password' required minlength="8"> </span>
             </div>
             <div class="ConfirmPassword">
                 <span class="left-item"> <label for="password"> Επιβεβαίωση Κωδικού: </label></span>
-                <span class="center-item"> <input type="password" required minlength="8"> </span>
-                <span class="right-item"> </span>
+                <span class="right-item"> <input type="password" name='ConfirmPassword' required minlength="8"> </span>
             </div>
             <br>
             <div class="SubButton">
                 <span class="right-text"> </span>
-                <span class="center-item"> <a href="offer.php" target="_self" title="submit"> <button class="sumbit-button"> Εγγραφή </button> </a> </span>
-                <span class="right-item"> </span>
+                <input type="submit" name="submit" value="Register">
+                <!-- <span class="right-item"> <a href="offer.php" target="_self" title="submit"> <button class="sumbit-button"> Εγγραφή </button> </a> </span> -->
             </div>
         </form>
         
@@ -165,15 +161,15 @@
         if (isset($_POST['submit'])) {
             
             // Πέρνουμε τα στοιχεία που εισήγαγε ο χρήστης
-            $BrandName = $_POST['name'];
-            $VAT = $_POST['vat_number'];
-            $Address = $_POST['address'];
-            $MunicipalityID = $_POST['municipality'];
-            $CountyID = $_POST['county'];
-            $Email = $_POST['email'];
-            $Username = $_POST['username'];
-            $Password = $_POST['password'];
-            $ConfirmPassword = $_POST['confirm_password'];
+            $BrandName = $_POST['BrandName'];
+            $VAT = $_POST['VAT'];
+            $Address = $_POST['Address'];
+            $MunicipalityID = $_POST['Municipality'];
+            $CountyID = $_POST['County'];
+            $Email = $_POST['Email'];
+            $Username = $_POST['Username'];
+            $Password = $_POST['Password'];
+            $ConfirmPassword = $_POST['ConfirmPassword'];
         
             // Ελέγχουμε αν οι κωδικοί ταιριάζουν
             if ($Password != $ConfirmPassword) {
@@ -181,7 +177,7 @@
             }
 
             // Εισαγωγή των στοιχείων στην Βάση Δεδομένων
-            $sql_register = "INSERT INTO users (BrandName, VAT, Address, MunicipalityID, CountyID, Email, Username, Password) VALUES ('$BrandName', '$VAT', '$Address', '$MunicipalityID', '$CountyID', '$Email', '$Username', '$Password')";
+            $sql_register = "INSERT INTO users (UserID, BrandName, VAT, Address, MunicipalityID, CountyID, Email, Username, Password) VALUES ('$user_id', '$BrandName', '$VAT', '$Address', '$MunicipalityID', '$CountyID', '$Email', '$Username', '$Password')";
             if ($conn->query($sql_register) === TRUE) {
                 echo "Επιτυχημένη Εγγραφή";
             } else {
