@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Αρχικοποίηση Σελίδας στον Browser -->
     <title> Globe Oil </title> <!-- Τίτλος Σελίδας -->
     <link rel="stylesheet" href="css/styles.css"> <!-- Σύνδεση με την CSS -->
+    <!-- Κώδικας της JavaScript για κλήση του ελέγχου της φόρμας καταχώρησης -->
+    <script src="Scripts\resisterCheck.js"></script>
 </head>
 
 <body> <!-- Σώμα Σελίδας -->
@@ -96,18 +98,18 @@
         ?>
         
         <!-- Φόρμα καταχώρησης χρήστη -->
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" onsubmit="return validateForm()">
             <div class="BrandName">
                 <span class="left-item"> Επωνυμία Επιχείρησης: </span>
-                <span class="right-item"> <input type="text" required maxlength="120" name='BrandName'> </span>
+                <span class="right-item"> <input type="text" name='BrandName'> </span>
             </div>
             <div class="VAT">
                 <span class="left-item"> A.Φ.Μ.: </span>
-                <span class="right-item"> <input type="number" required maxlength="9" minlength="9" name='VAT'> </span>
+                <span class="right-item"> <input type="text" name='VAT'> </span>
             </div>
             <div class="Address">
                 <span class="left-item"> Διεύθυνση: </span>
-                <span class="right-item"> <input type="text" required maxlength="120" name='Address'> </span>
+                <span class="right-item"> <input type="text" name='Address'> </span>
             </div>
             <div class="Municipality">
                 <span class="left-item"> Δήμος: </span>
@@ -132,19 +134,19 @@
             </div>
             <div class="Email">
                 <span class="left-item"> <label for="password"> Email: </label></span>
-                <span class="right-item"> <input type="email" name='Email' required> </span>
+                <span class="right-item"> <input type="email" name='Email'> </span>
             </div>
             <div class="Username">
                 <span class="left-item"> <label for="password"> Username: </label></span>
-                <span class="right-item"> <input type="text" name='Username' required minlength="6"> </span>
+                <span class="right-item"> <input type="text" name='Username'> </span>
             </div>
             <div class="Password">
                 <span class="left-item"> <label for="password"> Κωδικός: </label> </span>
-                <span class="right-item"> <input type="password" name='Password' required minlength="8"> </span>
+                <span class="right-item"> <input type="password" name='Password'> </span>
             </div>
             <div class="ConfirmPassword">
                 <span class="left-item"> <label for="password"> Επιβεβαίωση Κωδικού: </label></span>
-                <span class="right-item"> <input type="password" name='ConfirmPassword' required minlength="8"> </span>
+                <span class="right-item"> <input type="password" name='ConfirmPassword'> </span>
             </div>
             <br>
             <div class="SubButton">
@@ -154,37 +156,34 @@
             </div>
         </form>
         
-        <!-- PHP για έλεγχο καταχώρησης και εγγραφής στη Βάση Δεδομένων -->
         <?php
+            // Get the VAT number from the form
+            $vat = $_POST['VAT'];
 
-        // Ελέγχουμε αν έγινε καταχώρηση της φόρμας
-        if (isset($_POST['submit'])) {
-            
-            // Πέρνουμε τα στοιχεία που εισήγαγε ο χρήστης
-            $BrandName = $_POST['BrandName'];
-            $VAT = $_POST['VAT'];
-            $Address = $_POST['Address'];
-            $MunicipalityID = $_POST['Municipality'];
-            $CountyID = $_POST['County'];
-            $Email = $_POST['Email'];
-            $Username = $_POST['Username'];
-            $Password = $_POST['Password'];
-            $ConfirmPassword = $_POST['ConfirmPassword'];
-        
-            // Ελέγχουμε αν οι κωδικοί ταιριάζουν
-            if ($Password != $ConfirmPassword) {
-                die("Οι κωδικοί δεν ταιριάζουν!");
-            }
-
-            // Εισαγωγή των στοιχείων στην Βάση Δεδομένων
-            $sql_register = "INSERT INTO users (UserID, BrandName, VAT, Address, MunicipalityID, CountyID, Email, Username, Password) VALUES ('$user_id', '$BrandName', '$VAT', '$Address', '$MunicipalityID', '$CountyID', '$Email', '$Username', '$Password')";
-            if ($conn->query($sql_register) === TRUE) {
-                echo "Επιτυχημένη Εγγραφή";
+            // Check if the VAT is already registered in the database
+            $query_VAT = "SELECT * FROM users WHERE VAT='$vat'";
+            $result_VAT = mysqli_query($conn, $query_VAT);
+            if (mysqli_num_rows($result_VAT) > 0) {
+                // The VAT is already registered in the database, display an error message
+                echo "This VAT number is already registered in our database.";
             } else {
-                echo "Αποτυχημένη Εγγραφή";
-            }    
-        }
-
+                // The VAT is not registered in the database, insert a new record
+                $brandName = $_POST['BrandName'];
+                $address = $_POST['Address'];
+                $email = $_POST['Email'];
+                $username = $_POST['Username'];
+                $password = $_POST['Password'];
+    
+                $query_users = "INSERT INTO users (UserID, BrandName, VAT, Address, Email, Username, Password) VALUES ('$user_id', '$brandName', '$vat', '$address', '$email', '$username', '$password')";
+                if (mysqli_query($conn, $query_users)) {
+                    // Record inserted successfully, display a success message
+                    echo "Record inserted successfully.";
+                } else {
+                    // Error inserting record, display an error message
+                    echo "Error inserting record: " . mysqli_error($conn);
+                }
+            }
+    
         ?>
 
         <br><br>
