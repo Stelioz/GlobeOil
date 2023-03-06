@@ -87,6 +87,7 @@
             $result_userid = $conn->query($sql_userid);
             $row = $result_userid->fetch_assoc();
             $max_id = $row['max_id'];
+            // Το user_id θα χρησιμοποιηθεί κατά την εγγραφή στη Βάση Δεδομένων
             $user_id = $max_id + 1;
 
         ?>
@@ -154,21 +155,28 @@
             </div>
         </form>
         
+        <!-- Κώδικας PHP για καταχώρηση των στοιχείων στην Βάση Δεδομένων -->
         <?php
             if (isset($_POST["submit"])) {
+                // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
                 $brandName = $_POST["BrandName"];
                 $vat = $_POST["VAT"];
-                $password = $_POST["Password"];
-                $confirmPassword = $_POST["ConfirmPassword"];
                 $address = $_POST["Address"];
+                $municipality = $_POST["Municipality"];
+                $county = $_POST["County"];
                 $email = $_POST["Email"];
+                $username = $_POST["Username"];
+                $password = $_POST["Password"];
+
+                // Αυτόματη ανάθεση τιμής για τη στήλη Role
+                $role = "Επιχείρηση";
+
+                // Προετοιμασία για εισαγωγή του νεου χρήστη στη Βάση Δεδομένων
+                $sql = "INSERT INTO users (UserID, BrandName, VAT, Address, MunicipalityID, CountyID, Email, Role, Username, Password) VALUES ('$user_id', '$brandName', '$vat', '$address', '$municipality', '$county', '$email', '$role', '$username', '$password' )";
                 
-                // Prepare the SQL statement to insert the new user
-                $sql = "INSERT INTO users (brand_name, vat, password, address, email) VALUES ('$brandName', '$vat', '$password', '$address', '$email')";
-                
-                // Execute the SQL statement and check for errors
+                // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
                 if (!mysqli_query($conn, $sql)) {
-                    die("Υπήρξε κάποιο πρόβλημα κατά την εγγραφή του χρήστη: " . mysqli_error($conn));
+                    die("Ανεπιτυχής εγγραφή!");
                 }
                 
                 echo "Επιτυχής εγγραφή!";
