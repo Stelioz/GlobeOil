@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Αρχικοποίηση Σελίδας στον Browser -->
     <title> Globe Oil </title> <!-- Τίτλος Σελίδας -->
     <link rel="stylesheet" href="css/styles.css"> <!-- Σύνδεση με την CSS -->
-    <!-- Κώδικας της JavaScript για κλήση του ελέγχου της φόρμας καταχώρησης -->
-    <script src="Scripts\resisterCheck.js"></script>
+    <!-- Κώδικας της JavaScript για κλήση του ελέγχου της φόρμας καταχώρησης πλην του ΑΦΜ -->
+    <script src="Scripts/formCheck.js"></script>
+    <!-- Κώδικας της JavaScript για κλήση του ελέγχου του ΑΦΜ -->
+    <script src="Scripts/vatCheck.js"></script>
 </head>
 
 <body> <!-- Σώμα Σελίδας -->
@@ -48,26 +50,18 @@
             </section>
 
         </header>
-
-        <section class="offer">
-            <h1>Εγγραφή Επιχείρησης</h1>
-            <hr>
-        </section>
         
         <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
-        <?php
-
-            // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
+        <?php           
             $conn = mysqli_connect("localhost", "root", "password");
             if (!$conn) {
                 die("Η σύνδεση απέτυχε!");
             }
     
-            // Επιλογή της Βάσης Δεδομένων zindros_database
             if (!mysqli_select_db($conn, "zindros_database")) {
                 die("Η Βάση Δεδομένων δεν βρέθηκε!");
             }
-            
+
             // Επιλέγουμε τις τους Δήμους και τους Νομούς
             $result_municipalities = mysqli_query($conn, "SELECT * FROM municipalities");
             if (!$result_municipalities) {
@@ -96,9 +90,14 @@
             $user_id = $max_id + 1;
 
         ?>
+
+        <section class="offer">
+            <h1>Εγγραφή Επιχείρησης</h1>
+            <hr>
+        </section>
         
         <!-- Φόρμα καταχώρησης χρήστη -->
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" onsubmit="return validateForm()">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="myForm" onsubmit="return validateVAT() && validateForm()">
             <div class="BrandName">
                 <span class="left-item"> Επωνυμία Επιχείρησης: </span>
                 <span class="right-item"> <input type="text" name='BrandName'> </span>
@@ -150,40 +149,30 @@
             </div>
             <br>
             <div class="SubButton">
-                <span class="right-text"> </span>
+                <span class="right-text"> </span>            
                 <input type="submit" name="submit" value="Register">
-                <!-- <span class="right-item"> <a href="offer.php" target="_self" title="submit"> <button class="sumbit-button"> Εγγραφή </button> </a> </span> -->
             </div>
         </form>
         
         <?php
-            // Get the VAT number from the form
-            $vat = $_POST['VAT'];
-
-            // Check if the VAT is already registered in the database
-            $query_VAT = "SELECT * FROM users WHERE VAT='$vat'";
-            $result_VAT = mysqli_query($conn, $query_VAT);
-            if (mysqli_num_rows($result_VAT) > 0) {
-                // The VAT is already registered in the database, display an error message
-                echo "This VAT number is already registered in our database.";
-            } else {
-                // The VAT is not registered in the database, insert a new record
-                $brandName = $_POST['BrandName'];
-                $address = $_POST['Address'];
-                $email = $_POST['Email'];
-                $username = $_POST['Username'];
-                $password = $_POST['Password'];
-    
-                $query_users = "INSERT INTO users (UserID, BrandName, VAT, Address, Email, Username, Password) VALUES ('$user_id', '$brandName', '$vat', '$address', '$email', '$username', '$password')";
-                if (mysqli_query($conn, $query_users)) {
-                    // Record inserted successfully, display a success message
-                    echo "Record inserted successfully.";
-                } else {
-                    // Error inserting record, display an error message
-                    echo "Error inserting record: " . mysqli_error($conn);
+            if (isset($_POST["submit"])) {
+                $brandName = $_POST["BrandName"];
+                $vat = $_POST["VAT"];
+                $password = $_POST["Password"];
+                $confirmPassword = $_POST["ConfirmPassword"];
+                $address = $_POST["Address"];
+                $email = $_POST["Email"];
+                
+                // Prepare the SQL statement to insert the new user
+                $sql = "INSERT INTO users (brand_name, vat, password, address, email) VALUES ('$brandName', '$vat', '$password', '$address', '$email')";
+                
+                // Execute the SQL statement and check for errors
+                if (!mysqli_query($conn, $sql)) {
+                    die("Υπήρξε κάποιο πρόβλημα κατά την εγγραφή του χρήστη: " . mysqli_error($conn));
                 }
+                
+                echo "Επιτυχής εγγραφή!";
             }
-    
         ?>
 
         <br><br>
