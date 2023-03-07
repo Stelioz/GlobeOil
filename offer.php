@@ -70,50 +70,68 @@
 
         </header>
 
+        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
+        <?php
+            // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
+            $conn = mysqli_connect("localhost", "root", "password");
+            if (!$conn) {
+                die("Η σύνδεση απέτυχε!");
+            }
+
+            // Επιλογή της Βάσης Δεδομένων zindros_database
+            if (!mysqli_select_db($conn, "zindros_database")) {
+                die("Η Βάση Δεδομένων δεν βρέθηκε!");
+            }
+
+            //fetch data from the database
+            $username = $_SESSION['username']; //assuming user_id is the unique identifier for your user
+            $query = "SELECT BrandName, VAT, Address, MunicipalityID, CountyID FROM users WHERE Username = '$username'";
+            $result = mysqli_query($conn, $query);
+            if (!$result) {
+                printf("Error: %s\n", mysqli_error($conn));
+                exit();
+            }
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $BrandName = $row["BrandName"];
+                $VAT = $row["VAT"];
+                $Address = $row["Address"];
+                $Municipality = $row["MunicipalityID"];
+                $County = $row["CountyID"];
+            }
+
+            $conn->close();        
+        ?>
+
         <section class="offer">
             <h1>Καταχώρηση Προσφοράς</h1>
             <hr>
         </section>
         <form action="submit-offer.php" method="post">
-            <div class="corporation">
+            <div class="BrandName">
                 <span class="left-item">Επωνυμία Επιχείρησης:</span>
-                <span class="center-item"><input type="text" required></span>
+                <span class="center-item"><input type="text" name="BrandName" value="<?php echo $brandName; ?>"></span>
                 <span class="right-item"></span>
             </div>
-            <div class="afm">
+            <div class="VAT">
                 <span class="left-item">A.Φ.Μ.:</span>
-                <span class="center-item"><input type="number" required maxlength="9"></span>
+                <span class="center-item"><input type="text" name="VAT" value="<?php echo $VAT; ?>></span>
                 <span class="right-item"></span>
             </div>
-            <div class="address">
+            <div class="Address">
                 <span class="left-item">Διεύθυνση:</span>
-                <span class="center-item"><input type="text" required></span>
+                <span class="center-item"><input type="text" name="Address" value="<?php echo $Address; ?>></span>
                 <span class="right-item"></span>
             </div>
-            <div class="town">
+            <div class="Municipality">
                 <span class="left-item">Δήμος:</span>
-                <span class="center-item">
-                    <select id="dropdown-search">
-                        <option value="1"></option>
-                        <option value="2">Δ. ΑΘΗΝΑΙΩΝ</option>
-                        <option value="3">Δ. ΚΑΛΛΙΘΕΑΣ</option>
-                        <option value="4">Δ. ΠΕΡΙΣΤΕΡΙΟΥ</option>
-                        <option value="5">Δ. ΔΑΦΝΗΣ - ΥΜΜΗΤΟΥ</option>
-                    </select>
-                </span>
+                <span class="center-item"><input type="text" name="Municipality" value="<?php echo $Municipality; ?></span>
                 <span class="right-item"></span>
             </div>
-            <div class="area">
+            <div class="County">
                 <span class="left-item">Νομός:</span>
-                <span class="center-item">
-                    <select id="dropdown-search">
-                        <option value="1"></option>
-                        <option value="2">Ν. ΑΤΤΙΚΗΣ</option>
-                        <option value="3">Ν. ΑΙΤΩΛΟΑΚΑΡΝΑΝΙΑΣ</option>
-                        <option value="4">Ν. ΙΩΑΝΝΙΝΩΝ</option>
-                        <option value="5">Ν. ΚΑΒΑΛΑΣ</option>
-                    </select>
-                </span>
+                <span class="center-item"><input type="text" name="County" value="<?php echo $County; ?>></span>
                 <span class="right-item"></span>
             </div>
             <div class="fuel">
