@@ -10,10 +10,9 @@
 </head>
 
 <body> <!-- Σώμα Σελίδας -->
-    <div class="wrapper">
+    <div class="wrapper">        
+        <header> <!-- Κεφαλίδα της Σελίδας-->
         
-        <header> <!-- Κεφαλίδα της Σελίδας-->      
-            
             <!-- 1o Section του Header που αποτελείται από το Λογότυπο, το Μότο και το Κουμπί Εισόδου -->
             <section class="upper_section">
                 <!-- Λογότυπο Σελίδας -->
@@ -27,9 +26,24 @@
                     <h2> Το Μέλλον Στη Διανομή Καυσίμων </h2>
                 </div>
 
-                <!-- Κουμπί Εισόδου -->
+                <!-- Κουμπί Εισόδου / Εξόδου -->
                 <div class="login_button">
-                    <a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>
+                    <?php
+                        // Αρχίζει το session για τον έλεγχο εισόδου / εξόδου
+                        session_start();
+                        // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
+                        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+                            // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
+                            echo '<div class="login_button">';
+                            echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
+                            echo '</div>';
+                        } else {
+                            // Αν δεν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εισόδου
+                            echo '<div class="login_button">';
+                            echo '<a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>';
+                            echo '</div>';
+                        }
+                    ?>
                 </div>
             </section>
 
@@ -44,7 +58,6 @@
                     </ul>
                 </nav>
             </section>
-
         </header>
         
         <section class="announcements">

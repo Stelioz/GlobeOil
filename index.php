@@ -12,8 +12,7 @@
 <body> <!-- Σώμα Σελίδας -->
     <div class="wrapper">
         
-        <header> <!-- Κεφαλίδα της Σελίδας-->      
-            
+        <header> <!-- Κεφαλίδα της Σελίδας-->            
             <!-- 1o Section του Header που αποτελείται από το Λογότυπο, το Μότο και το Κουμπί Εισόδου -->
             <section class="upper_section">
                 <!-- Λογότυπο Σελίδας -->
@@ -27,9 +26,24 @@
                     <h2> Το Μέλλον Στη Διανομή Καυσίμων </h2>
                 </div>
 
-                <!-- Κουμπί Εισόδου -->
+                <!-- Κουμπί Εισόδου / Εξόδου -->
                 <div class="login_button">
-                    <a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>
+                    <?php
+                        // Αρχίζει το session για τον έλεγχο εισόδου / εξόδου
+                        session_start();
+                        // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
+                        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+                            // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
+                            echo '<div class="login_button">';
+                            echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
+                            echo '</div>';
+                        } else {
+                            // Αν δεν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εισόδου
+                            echo '<div class="login_button">';
+                            echo '<a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>';
+                            echo '</div>';
+                        }
+                    ?>
                 </div>
             </section>
 
@@ -44,157 +58,154 @@
                     </ul>
                 </nav>
             </section>
-
         </header>
         
         <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
         <?php
+            // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
+            $conn = mysqli_connect("localhost", "root", "password");
+            if (!$conn) {
+                die("Η σύνδεση απέτυχε!");
+            }
 
-        // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
-        $conn = mysqli_connect("localhost", "root", "password");
-        if (!$conn) {
-            die("Η σύνδεση απέτυχε!");
-        }
-
-        // Επιλογή της Βάσης Δεδομένων zindros_database
-        if (!mysqli_select_db($conn, "zindros_database")) {
-            die("Η Βάση Δεδομένων δεν βρέθηκε!");
-        }
+            // Επιλογή της Βάσης Δεδομένων zindros_database
+            if (!mysqli_select_db($conn, "zindros_database")) {
+                die("Η Βάση Δεδομένων δεν βρέθηκε!");
+            }
         
-        // Επιλέγουμε τις τιμές από τον πίνακα offers
-        $result = mysqli_query($conn, "SELECT Price FROM offers");
-        if (!$result) {
-            die("Το ερώτημα απέτυχε!");
-        }
+            // Επιλέγουμε τις τιμές από τον πίνακα offers
+            $result = mysqli_query($conn, "SELECT Price FROM offers");
+            if (!$result) {
+                die("Το ερώτημα απέτυχε!");
+            }
         
-        /* Ζητάμε τη μέγιστη, τη μέση και την ελάχιστη τιμή για κάθε τύπο καυσίμου
-        επιλέγοντας την στήλη "Price" και με διακριτικό το "FuelID" */
-        // Μέγιστη τιμή
-        $sql_max95 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 1";
-        $sql_max98 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 2";
-        $sql_max100 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 3";
-        $sql_maxDiesel = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 4";
-        $sql_maxThermal = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 5";
-        // Μέση τιμή
-        $sql_avg95 = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 1";
-        $sql_avg98 = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 2";
-        $sql_avg100 = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 3";
-        $sql_avgDiesel = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 4";
-        $sql_avgThermal = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 5";
-        // Ελάχιστη τιμή
-        $sql_min95 = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 1";   
-        $sql_min98 = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 2";
-        $sql_min100 = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 3";
-        $sql_minDiesel = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 4";
-        $sql_minThermal = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 5";
+            /* Ζητάμε τη μέγιστη, τη μέση και την ελάχιστη τιμή για κάθε τύπο καυσίμου
+            επιλέγοντας την στήλη "Price" και με διακριτικό το "FuelID" */
+            // Μέγιστη τιμή
+            $sql_max95 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 1";
+            $sql_max98 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 2";
+            $sql_max100 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 3";
+            $sql_maxDiesel = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 4";
+            $sql_maxThermal = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 5";
+            // Μέση τιμή
+            $sql_avg95 = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 1";
+            $sql_avg98 = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 2";
+            $sql_avg100 = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 3";
+            $sql_avgDiesel = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 4";
+            $sql_avgThermal = "SELECT AVG(Price) AS avg_value FROM offers WHERE FuelID = 5";
+            // Ελάχιστη τιμή
+            $sql_min95 = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 1";   
+            $sql_min98 = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 2";
+            $sql_min100 = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 3";
+            $sql_minDiesel = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 4";
+            $sql_minThermal = "SELECT MIN(Price) AS min_value FROM offers WHERE FuelID = 5";
 
-        // Κάνουμε τα ερωτήματα για τις μέγιστες τιμές των καυσίμων
-        $result_max95 = mysqli_query($conn, $sql_max95);
-        if ($result_max95 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_max98 = mysqli_query($conn, $sql_max98);
-        if ($result_max98 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_max100 = mysqli_query($conn, $sql_max100);
-        if ($result_max100 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_maxDiesel = mysqli_query($conn, $sql_maxDiesel);
-        if ($result_maxDiesel === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_maxThermal = mysqli_query($conn, $sql_maxThermal);
-        if ($result_maxThermal === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
+            // Κάνουμε τα ερωτήματα για τις μέγιστες τιμές των καυσίμων
+            $result_max95 = mysqli_query($conn, $sql_max95);
+            if ($result_max95 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_max98 = mysqli_query($conn, $sql_max98);
+            if ($result_max98 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_max100 = mysqli_query($conn, $sql_max100);
+            if ($result_max100 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_maxDiesel = mysqli_query($conn, $sql_maxDiesel);
+            if ($result_maxDiesel === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_maxThermal = mysqli_query($conn, $sql_maxThermal);
+            if ($result_maxThermal === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
         
-        // Κάνουμε τα ερωτήματα για τη μέση τιμή των καυσίμων
-        $result_avg95 = mysqli_query($conn, $sql_avg95);
-        if ($result_avg95 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_avg98 = mysqli_query($conn, $sql_avg98);
-        if ($result_avg98 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_avg100 = mysqli_query($conn, $sql_avg100);
-        if ($result_avg100 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_avgDiesel = mysqli_query($conn, $sql_avgDiesel);
-        if ($result_avgDiesel === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_avgThermal = mysqli_query($conn, $sql_avgThermal);
-        if ($result_avgThermal === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
+            // Κάνουμε τα ερωτήματα για τη μέση τιμή των καυσίμων
+            $result_avg95 = mysqli_query($conn, $sql_avg95);
+            if ($result_avg95 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_avg98 = mysqli_query($conn, $sql_avg98);
+            if ($result_avg98 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_avg100 = mysqli_query($conn, $sql_avg100);
+            if ($result_avg100 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_avgDiesel = mysqli_query($conn, $sql_avgDiesel);
+            if ($result_avgDiesel === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_avgThermal = mysqli_query($conn, $sql_avgThermal);
+            if ($result_avgThermal === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
 
-        // Κάνουμε τα ερωτήματα για την ελάχιστη τιμή των καυσίμων
-        $result_min95 = mysqli_query($conn, $sql_min95);
-        if ($result_min95 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_min98 = mysqli_query($conn, $sql_min98);
-        if ($result_min98 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_min100 = mysqli_query($conn, $sql_min100);
-        if ($result_min100 === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_minDiesel = mysqli_query($conn, $sql_minDiesel);
-        if ($result_minDiesel === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
-        $result_minThermal = mysqli_query($conn, $sql_minThermal);
-        if ($result_minThermal === false) {
-            die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
-          }
+            // Κάνουμε τα ερωτήματα για την ελάχιστη τιμή των καυσίμων
+            $result_min95 = mysqli_query($conn, $sql_min95);
+            if ($result_min95 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_min98 = mysqli_query($conn, $sql_min98);
+            if ($result_min98 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_min100 = mysqli_query($conn, $sql_min100);
+            if ($result_min100 === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_minDiesel = mysqli_query($conn, $sql_minDiesel);
+            if ($result_minDiesel === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
+            $result_minThermal = mysqli_query($conn, $sql_minThermal);
+            if ($result_minThermal === false) {
+                die("Το ερώτημα απέτυχε: " . mysqli_error($conn));
+            }
 
-        // Ανακτούμε τις μέγιστες τιμές για κάθε τύπο καυσίμου
-        $row_max95 = mysqli_fetch_assoc($result_max95);
-        $max_value_95 = $row_max95['max_value'];
-        $row_max98 = mysqli_fetch_assoc($result_max98);
-        $max_value_98 = $row_max98['max_value'];
-        $row_max100 = mysqli_fetch_assoc($result_max100);
-        $max_value_100 = $row_max100['max_value'];
-        $row_maxDiesel = mysqli_fetch_assoc($result_maxDiesel);
-        $max_value_Diesel = $row_maxDiesel['max_value'];
-        $row_maxThermal = mysqli_fetch_assoc($result_maxThermal);
-        $max_value_Thermal = $row_maxThermal['max_value'];
+            // Ανακτούμε τις μέγιστες τιμές για κάθε τύπο καυσίμου
+            $row_max95 = mysqli_fetch_assoc($result_max95);
+            $max_value_95 = $row_max95['max_value'];
+            $row_max98 = mysqli_fetch_assoc($result_max98);
+            $max_value_98 = $row_max98['max_value'];
+            $row_max100 = mysqli_fetch_assoc($result_max100);
+            $max_value_100 = $row_max100['max_value'];
+            $row_maxDiesel = mysqli_fetch_assoc($result_maxDiesel);
+            $max_value_Diesel = $row_maxDiesel['max_value'];
+            $row_maxThermal = mysqli_fetch_assoc($result_maxThermal);
+            $max_value_Thermal = $row_maxThermal['max_value'];
 
-        // Ανακτούμε τις μέσες τιμές για κάθε τύπο καυσίμου
-        $row_avg95 = mysqli_fetch_assoc($result_avg95);
-        $avg_value_95 = $row_avg95['avg_value'];
-        $avg_formatted_95 = number_format($avg_value_95, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
-        $row_avg98 = mysqli_fetch_assoc($result_avg98);
-        $avg_value_98 = $row_avg98['avg_value'];
-        $avg_formatted_98 = number_format($avg_value_98, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
-        $row_avg100 = mysqli_fetch_assoc($result_avg100);
-        $avg_value_100 = $row_avg100['avg_value'];
-        $avg_formatted_100 = number_format($avg_value_100, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
-        $row_avgDiesel = mysqli_fetch_assoc($result_avgDiesel);
-        $avg_value_Diesel = $row_avgDiesel['avg_value'];
-        $avg_formatted_Diesel = number_format($avg_value_Diesel, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
-        $row_avgThermal = mysqli_fetch_assoc($result_avgThermal);
-        $avg_value_Thermal = $row_avgThermal['avg_value'];
-        $avg_formatted_Thermal = number_format($avg_value_Thermal, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
+            // Ανακτούμε τις μέσες τιμές για κάθε τύπο καυσίμου
+            $row_avg95 = mysqli_fetch_assoc($result_avg95);
+            $avg_value_95 = $row_avg95['avg_value'];
+            $avg_formatted_95 = number_format($avg_value_95, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
+            $row_avg98 = mysqli_fetch_assoc($result_avg98);
+            $avg_value_98 = $row_avg98['avg_value'];
+            $avg_formatted_98 = number_format($avg_value_98, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
+            $row_avg100 = mysqli_fetch_assoc($result_avg100);
+            $avg_value_100 = $row_avg100['avg_value'];
+            $avg_formatted_100 = number_format($avg_value_100, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
+            $row_avgDiesel = mysqli_fetch_assoc($result_avgDiesel);
+            $avg_value_Diesel = $row_avgDiesel['avg_value'];
+            $avg_formatted_Diesel = number_format($avg_value_Diesel, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
+            $row_avgThermal = mysqli_fetch_assoc($result_avgThermal);
+            $avg_value_Thermal = $row_avgThermal['avg_value'];
+            $avg_formatted_Thermal = number_format($avg_value_Thermal, 3); // Κρατάμε τα 3 δεκαδικά ψηφία
 
-        // Ανακτούμε τις μέσες τιμές για κάθε τύπο καυσίμου
-        $row_min95 = mysqli_fetch_assoc($result_min95);
-        $min_value_95 = $row_min95['min_value'];
-        $row_min98 = mysqli_fetch_assoc($result_min98);
-        $min_value_98 = $row_min98['min_value'];
-        $row_min100 = mysqli_fetch_assoc($result_min100);
-        $min_value_100 = $row_min100['min_value'];
-        $row_minDiesel = mysqli_fetch_assoc($result_minDiesel);
-        $min_value_Diesel = $row_minDiesel['min_value'];
-        $row_minThermal = mysqli_fetch_assoc($result_minThermal);
-        $min_value_Thermal = $row_minThermal['min_value'];
-        
+            // Ανακτούμε τις μέσες τιμές για κάθε τύπο καυσίμου
+            $row_min95 = mysqli_fetch_assoc($result_min95);
+            $min_value_95 = $row_min95['min_value'];
+            $row_min98 = mysqli_fetch_assoc($result_min98);
+            $min_value_98 = $row_min98['min_value'];
+            $row_min100 = mysqli_fetch_assoc($result_min100);
+            $min_value_100 = $row_min100['min_value'];
+            $row_minDiesel = mysqli_fetch_assoc($result_minDiesel);
+            $min_value_Diesel = $row_minDiesel['min_value'];
+            $row_minThermal = mysqli_fetch_assoc($result_minThermal);
+            $min_value_Thermal = $row_minThermal['min_value'];
         ?>
 
         <section class="prices">
@@ -222,12 +233,9 @@
                     <li><h2>Τιμή Πετρελαίου Θέρμανσης</h2></li>
                     <h3>Μέγιστη: <?php echo "$max_value_Thermal" ?>€ / Ελάχιστη: <?php echo "$min_value_Thermal" ?>€ / Μέση: <?php echo "$avg_formatted_Thermal" ?>€</h3>
                 </ul>
-
             </div>
         </section>
-        
-        <br><br>
-        
+        <br><br>        
         <section class="announcements">
         <h1>Τελευταίες Ανακοινώσεις</h1>
         <hr>
@@ -251,7 +259,6 @@
                 }
             }
         ?>
-
         </section>
             
         <footer>  <!-- Υποσέλιδο της Σελίδας-->  
@@ -259,7 +266,6 @@
             <span class="separator">|</span>
             <span class="right-text"><a href="Pdf\Policy.pdf" target="_blank">« Πολιτική Απορρήτου »</a></span>
         </footer>
-
     </div>
 </body>
 

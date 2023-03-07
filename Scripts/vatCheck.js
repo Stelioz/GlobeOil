@@ -15,8 +15,6 @@ function validateVAT() {
         alert("Ο Α.Φ.Μ. πρέπει να αποτελείται από 9 ψηφία!");
         return false;
     }
-
-    
     
     // Έλεγχος αν το ΑΦΜ υπάρχει στην βάση Δεδομένων
     xmlhttp.onreadystatechange = function() {
