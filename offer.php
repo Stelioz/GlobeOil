@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Αρχικοποίηση Σελίδας στον Browser -->
     <title> Globe Oil </title> <!-- Τίτλος Σελίδας -->
     <link rel="stylesheet" href="css/styles.css"> <!-- Σύνδεση με την CSS -->
+    <!-- Κώδικας της JavaScript για κλήση του ελέγχου της φόρμας καταχώρησης -->
+    <script src="Scripts/offerCheck.js"></script>
 </head>
 
 <body> <!-- Σώμα Σελίδας -->
@@ -83,86 +85,120 @@
                 die("Η Βάση Δεδομένων δεν βρέθηκε!");
             }
 
-            //fetch data from the database
-            $username = $_SESSION['username']; //assuming user_id is the unique identifier for your user
-            $query = "SELECT BrandName, VAT, Address, MunicipalityID, CountyID FROM users WHERE Username = '$username'";
+            // Επιλέγουμε τα καύσιμα
+            $result_fuels = mysqli_query($conn, "SELECT * FROM fuels");
+            if (!$result_fuels) {
+                die("Το ερώτημα απέτυχε!");
+            }
+
+            // Τοποθετούμε τα καύσιμα σε πίνακες
+            $fuels = array();
+            while ($row = $result_fuels->fetch_assoc()) {
+                $fuels[$row['FuelID']] = $row['FuelName'];
+            }
+
+            // Ανακτούμε τα δεδομένα από τη βάση δεδομένων ώστε να εισάγουμε αυτόματα στη φόρμα
+            $username = $_SESSION['username'];
+            // Κάνουμε JOIN το πίνακα users με τους πίνακες municipalities και counties ώστε να εμφανίσουμε τα ονόματα των Δήμων και των Νομών
+            $query = "SELECT u.UserID, u.BrandName, u.VAT, u.Address, m.MunicipalityName, c.CountyName FROM users u 
+                      INNER JOIN municipalities m ON u.MunicipalityID = m.MunicipalityID 
+                      INNER JOIN counties c ON u.CountyID = c.CountyID 
+                      WHERE u.Username = '$username'";
             $result = mysqli_query($conn, $query);
             if (!$result) {
                 printf("Error: %s\n", mysqli_error($conn));
                 exit();
             }
 
+            // Κάνουμε αντιστήχηση των δεδομένων σε μεταβλητές 
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                $BrandName = $row["BrandName"];
-                $VAT = $row["VAT"];
-                $Address = $row["Address"];
-                $Municipality = $row["MunicipalityID"];
-                $County = $row["CountyID"];
-            }
-
-            $conn->close();        
+                $user_id = $row["UserID"];
+                $brandName = $row["BrandName"];
+                $vat = $row["VAT"];
+                $address = $row["Address"];
+                $municipality = $row["MunicipalityName"];
+                $county = $row["CountyName"];
+            }   
         ?>
 
         <section class="offer">
             <h1>Καταχώρηση Προσφοράς</h1>
             <hr>
         </section>
-        <form action="submit-offer.php" method="post">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="offerForm" onsubmit="return validateOffer()">
             <div class="BrandName">
                 <span class="left-item">Επωνυμία Επιχείρησης:</span>
-                <span class="center-item"><input type="text" name="BrandName" value="<?php echo $brandName; ?>"></span>
-                <span class="right-item"></span>
+                <span class="right-item"><input type="text" name="BrandName" value="<?php echo "$brandName" ?>"></span>
             </div>
             <div class="VAT">
                 <span class="left-item">A.Φ.Μ.:</span>
-                <span class="center-item"><input type="text" name="VAT" value="<?php echo $VAT; ?>></span>
+                <span class="right-item"><input type="text" name="VAT" value="<?php echo "$vat" ?>"></span>
                 <span class="right-item"></span>
             </div>
             <div class="Address">
                 <span class="left-item">Διεύθυνση:</span>
-                <span class="center-item"><input type="text" name="Address" value="<?php echo $Address; ?>></span>
-                <span class="right-item"></span>
+                <span class="right-item"><input type="text" name="Address" value="<?php echo "$address" ?>"></span>
             </div>
             <div class="Municipality">
                 <span class="left-item">Δήμος:</span>
-                <span class="center-item"><input type="text" name="Municipality" value="<?php echo $Municipality; ?></span>
-                <span class="right-item"></span>
+                <span class="right-item"><input type="text" name="Municipality" value="<?php echo "$municipality" ?>"></span>
             </div>
             <div class="County">
                 <span class="left-item">Νομός:</span>
-                <span class="center-item"><input type="text" name="County" value="<?php echo $County; ?>></span>
-                <span class="right-item"></span>
+                <span class="right-item"><input type="text" name="County" value="<?php echo "$county" ?>"></span>
             </div>
-            <div class="fuel">
+            <div class="Fuels">
                 <span class="left-item">Είδος Καυσίμου:</span>
-                <span class="center-item">
-                    <select id="fuel-search">
-                        <option value="1"></option>
-                        <option value="2">ΑΜΟΛΥΒΔΗ 95</option>
-                        <option value="3">ΑΜΟΛΥΒΔΗ 100</option>
-                        <option value="4">ΠΕΤΡΕΛΑΙΟ ΚΙΝΗΣΗΣ</option>
-                        <option value="5">ΠΕΤΡΕΛΑΙΟ ΘΕΡΜΑΝΣ.</option>
+                <span class="right-item">
+                    <select id="dropdown-menu3" name='Fuels'> <!-- Χρηση Dropdown Menu για τα καύσιμα -->
+                        <?php foreach ($fuels as $id => $name): ?>
+                        <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
+                        <?php endforeach; ?>
                     </select>
                 </span>
-                <span class="right-item"></span>
             </div>
-            <div class="price">
-                <span class="left-item">Τιμή:</span>
-                <span class="center-item"><input type="number" required pattern="^\d+(\.\d{1,2})?$"></span>
-                <span class="right-item"></span>
+            <div class="Price">
+                <span class="left-item">Τιμή σε €:</span>
+                <span class="right-item"> <input type="text" name='Price'> </span>
             </div>
-            <div class="date">
+            <div class="ExpirationDate">
                 <span class="left-item">Ημερομηνία Λήξης Προσφοράς:</span>
-                <span class="center-item"><input type="date" required></span>
-                <span class="right-item"></span>
+                <span class="right-item"> <input type="date" name='ExpirationDate'> </span>
             </div>
-            <div class="sub-button">
+            <div class="CurrentDate">
+                <span class="left-item">Ημερομηνία Καταχώρησης Προσφοράς:</span>
+                <span class="right-item"> <input type="text" name='CurrentDate' value="<?php echo date('d/m/Y'); ?>"> </span>
+            </div>
+            <br>
+            <div class="SubButton">
                 <span class="right-text"></span>
-                <span class="center-item"><a href="offer.html" target="_self" title="submit"><button class="sumbit-button">Καταχώρηση</button></a></span>
-                <span class="right-item"></span>
+                <input type="submit" name="submit" value="Καταχώρηση">
             </div>
         </form>
+
+        <!-- Κώδικας PHP για καταχώρηση των στοιχείων στην Βάση Δεδομένων -->
+        <?php
+            if (isset($_POST["submit"])) {
+                // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
+                $fuel_id = $_POST["Fuels"];
+                $date = $_POST["ExpirationDate"];
+                $price = $_POST["Price"];
+
+                // Προετοιμασία για εισαγωγή της νέας προσφοράς στη Βάση Δεδομένων
+                $sql = "INSERT INTO offers (UserID, FuelID, ExpirationDate, Price) VALUES ('$user_id', '$fuel_id', '$date', '$price')";
+                
+                // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
+                if (!mysqli_query($conn, $sql)) {
+                    die("Ανεπιτυχής εγγραφή!");
+                } else {
+                    echo "Επιτυχής εγγραφή!";
+                }
+                
+                $conn->close();     
+            }
+        ?>
+
         <br><br>
         
         <footer>

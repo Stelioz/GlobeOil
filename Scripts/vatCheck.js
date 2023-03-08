@@ -6,7 +6,7 @@ function validateVAT() {
     
     // Έλεγχος αν το ΑΦΜ είναι αριθμός
     if (isNaN(vat)) {
-        alert("Please enter a valid VAT number");
+        alert("Δώστε έναν ορθό ΑΦΜ!");
         return false;
     }
 

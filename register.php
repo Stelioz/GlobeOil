@@ -94,14 +94,6 @@
             while ($row = $result_counties->fetch_assoc()) {
                 $counties[$row['CountyID']] = $row['CountyName'];
             }
-
-            // Αντλούμε το UserID του τελευταίου χρήστη
-            $sql_userid = "SELECT MAX(UserID) AS max_id FROM users";
-            $result_userid = $conn->query($sql_userid);
-            $row = $result_userid->fetch_assoc();
-            $max_id = $row['max_id'];
-            // Το user_id θα χρησιμοποιηθεί κατά την εγγραφή στη Βάση Δεδομένων
-            $user_id = $max_id + 1;
         ?>
 
         <section class="offer">
@@ -163,7 +155,7 @@
             <br>
             <div class="SubButton">
                 <span class="right-text"> </span>            
-                <input type="submit" name="submit" value="Register">
+                <input type="submit" name="submit" value="Καταχώρηση">
             </div>
         </form>
         
@@ -184,14 +176,16 @@
                 $role = "Επιχείρηση";
 
                 // Προετοιμασία για εισαγωγή του νεου χρήστη στη Βάση Δεδομένων
-                $sql = "INSERT INTO users (UserID, BrandName, VAT, Address, MunicipalityID, CountyID, Email, Role, Username, Password) VALUES ('$user_id', '$brandName', '$vat', '$address', '$municipality', '$county', '$email', '$role', '$username', '$password' )";
+                $sql = "INSERT INTO users (BrandName, VAT, Address, MunicipalityID, CountyID, Email, Role, Username, Password) VALUES ('$brandName', '$vat', '$address', '$municipality', '$county', '$email', '$role', '$username', '$password' )";
                 
                 // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
                 if (!mysqli_query($conn, $sql)) {
                     die("Ανεπιτυχής εγγραφή!");
+                } else {
+                    echo "Επιτυχής εγγραφή!";
                 }
-                
-                echo "Επιτυχής εγγραφή!";
+
+                $conn->close();    
             }
         ?>
 
