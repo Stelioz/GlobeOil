@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/styles.css"> <!-- Σύνδεση με την CSS -->
     <!-- Κώδικας της JavaScript για κλήση του ελέγχου της φόρμας καταχώρησης -->
     <script src="Scripts/offerCheck.js"></script>
+    <script src="Scripts/offerSubmit.js"></script>
 </head>
 
 <body> <!-- Σώμα Σελίδας -->
@@ -126,27 +127,30 @@
             <h1>Καταχώρηση Προσφοράς</h1>
             <hr>
         </section>
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="offerForm" onsubmit="return validateOffer()">
+        <form method="post" name= "myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="offerForm" onsubmit="return validateSubmit()">
+            <div class="UserID">
+                <span class="right-item"><input type="number" name="UserID" value="<?php echo "$user_id" ?>" readonly></span>
+            </div>
             <div class="BrandName">
                 <span class="left-item">Επωνυμία Επιχείρησης:</span>
-                <span class="right-item"><input type="text" name="BrandName" value="<?php echo "$brandName" ?>"></span>
+                <span class="right-item"><input type="text" name="BrandName" value="<?php echo "$brandName" ?>" readonly></span>
             </div>
             <div class="VAT">
                 <span class="left-item">A.Φ.Μ.:</span>
-                <span class="right-item"><input type="text" name="VAT" value="<?php echo "$vat" ?>"></span>
+                <span class="right-item"><input type="text" name="VAT" value="<?php echo "$vat" ?>" readonly></span>
                 <span class="right-item"></span>
             </div>
             <div class="Address">
                 <span class="left-item">Διεύθυνση:</span>
-                <span class="right-item"><input type="text" name="Address" value="<?php echo "$address" ?>"></span>
+                <span class="right-item"><input type="text" name="Address" value="<?php echo "$address" ?>" readonly></span>
             </div>
             <div class="Municipality">
                 <span class="left-item">Δήμος:</span>
-                <span class="right-item"><input type="text" name="Municipality" value="<?php echo "$municipality" ?>"></span>
+                <span class="right-item"><input type="text" name="Municipality" value="<?php echo "$municipality" ?>" readonly></span>
             </div>
             <div class="County">
                 <span class="left-item">Νομός:</span>
-                <span class="right-item"><input type="text" name="County" value="<?php echo "$county" ?>"></span>
+                <span class="right-item"><input type="text" name="County" value="<?php echo "$county" ?>" readonly></span>
             </div>
             <div class="Fuels">
                 <span class="left-item">Είδος Καυσίμου:</span>
@@ -166,10 +170,6 @@
                 <span class="left-item">Ημερομηνία Λήξης Προσφοράς:</span>
                 <span class="right-item"> <input type="date" name='ExpirationDate'> </span>
             </div>
-            <div class="CurrentDate">
-                <span class="left-item">Ημερομηνία Καταχώρησης Προσφοράς:</span>
-                <span class="right-item"> <input type="text" name='CurrentDate' value="<?php echo date('d/m/Y'); ?>"> </span>
-            </div>
             <br>
             <div class="SubButton">
                 <span class="right-text"></span>
@@ -181,6 +181,7 @@
         <?php
             if (isset($_POST["submit"])) {
                 // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
+                $user_id = $_POST["UserID"];
                 $fuel_id = $_POST["Fuels"];
                 $date = $_POST["ExpirationDate"];
                 $price = $_POST["Price"];

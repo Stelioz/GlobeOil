@@ -1,66 +1,33 @@
 function validateOffer() {
     // Αντιστοίχιση των μεταβλητών με τη φόρμα της HTML
-    var brandName = document.getElementsByName("BrandName")[0].value;
-    var vat = parseFloat(document.getElementsByName("VAT")[0].value);
-    var address = document.getElementsByName("Address")[0].value;
-    var municipality = document.getElementsByName("Municipality")[0].value;
-    var county = document.getElementsByName("County")[0].value;
-    // Θέλουμε η τιμή να είναι float με 3 δεκαδικά ψηφία
     var price = parseFloat(document.getElementsByName("Price")[0].value).toFixed(3);
-    var date = document.getElementsByName("ExpirationDate")[0].value;
+    var expDate = document.getElementsByName("ExpirationDate")[0].value;
+    const curDate = new Date(); // Λαμβάνουμε την σημερινή ημερομηνία
 
+    console.log(curDate);
+    console.log(expDate);
     
   
     // Έλεγχος αν είναι συμπληρωμένα τα πεδία από τον χρήστη
-    if (brandName == "") {
-        alert("Παρακαλούμε συμπληρώστε την Επωνυμία της επιχείρησης!");
-        return false;
-    }
-
-    if (vat == "") {
-        alert("Παρακαλούμε συμπληρώστε τον ΑΦΜ της επιχείρησης!");
-            return false;
-    }
-    // Έλεγχος αν το ΑΦΜ είναι αριθμός
-    if (isNaN(vat)) {
-        alert("Ο ΑΦΜ που δώσατε δεν είναι ορθός!");
-        return false;
-    }
-
-    // Έλεγχος αν το ΑΦΜ είναι ακριβώς 9 ψηφία
-    if (!/^\d{9}$/.test(vat)) {
-        alert("Ο Α.Φ.Μ. πρέπει να αποτελείται από 9 ψηφία!");
-        return false;
-    }
-
-    if (address == "") {
-        alert("Παρακαλούμε συμπληρώστε τη διεύθυνση σας!");
-        return false;
-   }
-  
-   if (municipality == "") {
-        alert("Παρακαλούμε συμπληρώστε τον Δήμο σας!");
-        return false;
-  }
-  
-    if (county == "") {
-        alert("Παρακαλούμε συμπληρώστε τον Νομό σας!");
-        return false;
-    }
-  
     if (price == "") {
         alert("Παρακαλούμε συμπληρώστε την τιμή της προσφοράς!");
         return false;
     }
     
-    // Έλεγχος αν η τιμή έχει θετική τιμή με 3 δεκαδικά ψηφία
-    if (isNaN(price) || !isFinite(price) || price < 0) {
-        alert("Δώστε μία θετική τιμή με τρία δεκαδικά ψηφία!");
+    if (expDate == "") {
+        alert("Παρακαλούμε συμπληρώστε την ημερομηνία λήξης της προσφοράς!");
+        return false;
+    }
+    
+    // Έλεγχος αν η τιμή είναι θετικός αριθμός
+    if (isNaN(price) ||  price < 0) {
+        alert("Η τιμή προσφοράς θα πρέπει να είναι θετικός αριθμός!");
         return false;
     }
 
-    if (date == "") {
-        alert("Παρακαλούμε συμπληρώστε την ημερομηνία λήξης της προσφοράς!");
+    // Έλγχος αν η ημερομηνία λήξης είναι μετά τη σημερινή
+    if (new Date(expDate) < curDate) {
+        alert("Η ημερομηνία λήξης δε μπορεί να είναι πριν τη σημερινή!")
         return false;
     }
   
