@@ -75,7 +75,7 @@
                 die("Η Βάση Δεδομένων δεν βρέθηκε!");
             }
 
-            // Επιλέγουμε τις τους Δήμους και τους Νομούς
+            // Επιλέγουμε τους Δήμους και τους Νομούς
             $result_municipalities = mysqli_query($conn, "SELECT * FROM municipalities");
             if (!$result_municipalities) {
                 die("Το ερώτημα απέτυχε!");

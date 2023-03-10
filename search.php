@@ -60,96 +60,111 @@
             </section>
         </header>
         
+        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
+        <?php           
+            $conn = mysqli_connect("localhost", "root", "password");
+            if (!$conn) {
+                die("Η σύνδεση απέτυχε!");
+            }
+    
+            if (!mysqli_select_db($conn, "zindros_database")) {
+                die("Η Βάση Δεδομένων δεν βρέθηκε!");
+            }
+
+            // Επιλέγουμε τους Δήμους και τα Καύσιμα
+            $result_counties = mysqli_query($conn, "SELECT * FROM counties");
+            if (!$result_counties) {
+                die("Το ερώτημα απέτυχε!");
+            }
+            $result_fuels = mysqli_query($conn, "SELECT * FROM fuels");
+            if (!$result_fuels) {
+                die("Το ερώτημα απέτυχε!");
+            }
+
+            // Τοποθετούμε τους Δήμους και τα Κάυσιμα σε πίνακες
+            $counties = array();
+            $fuels = array();
+            while ($row = $result_counties->fetch_assoc()) {
+                $counties[$row['CountyID']] = $row['CountyName'];
+            }           
+            while ($row = $result_fuels->fetch_assoc()) {
+                $fuels[$row['FuelID']] = $row['FuelName'];
+            }
+
+        ?>
+
         <section class="filters">
             <h1>Φίλτρα</h1>
             <hr>
         </section>
-        <section class="search-filters">
-            <span class="area">Νομός:</span>
-            <span class="area-search">
-                <select id="dropdown-search">
-                    <option value="1"></option>
-                        <option value="2">Ν. ΑΤΤΙΚΗΣ</option>
-                        <option value="3">Ν. ΑΙΤΩΛΟΑΚΑΡΝΑΝΙΑΣ</option>
-                        <option value="4">Ν. ΙΩΑΝΝΙΝΩΝ</option>
-                        <option value="5">Ν. ΚΑΒΑΛΑΣ</option>
-                </select>
+        <form method="get">
+            <span class="County">
+                <span class="left-item"> Νομός: </span>
+                <span class="right-item">
+                    <select id="dropdown-menu3" name='County'> <!-- Χρηση Dropdown Menu για τους Νομούς -->
+                        <?php foreach ($counties as $id => $name): ?>
+                            <option value="<?php echo $id; ?>" <?php if(isset($_GET['County']) && $_GET['County'] == $id) echo 'selected'; ?>> <?php echo $name; ?> </option>
+                        <?php endforeach; ?>
+                    </select>
+                </span>
             </span>
-            <span class="fuel">Είδος Καυσίμου:</span>
-            <span class="fuel-search">
-                <select id="fuel-search">
-                    <option value="1"></option>
-                    <option value="2">ΑΜΟΛΥΒΔΗ 95</option>
-                    <option value="3">ΑΜΟΛΥΒΔΗ 100</option>
-                    <option value="4">ΠΕΤΡΕΛΑΙΟ ΚΙΝΗΣΗΣ</option>
-                    <option value="5">ΠΕΤΡΕΛΑΙΟ ΘΕΡΜΑΝΣ.</option>
-                </select>
+            <span class="Fuels">
+                <span class="left-item"> Καύσιμο: </span>
+                <span class="right-item">
+                <select id="dropdown-menu4" name='Fuel'> <!-- Χρηση Dropdown Menu για τα Καύσιμα -->
+                        <?php foreach ($fuels as $id => $name): ?>
+                            <option value="<?php echo $id; ?>" <?php if(isset($_GET['Fuel']) && $_GET['Fuel'] == $id) echo 'selected'; ?>> <?php echo $name; ?> </option>
+                        <?php endforeach; ?>
+                    </select>
+                </span>
             </span>
-            <a href="search.html" target="_self" title="search"><button class="search-button">Αναζήτηση</button></a>
-        </section>
+            <button type="submit" name="search" class="search-button">ΕΦΑΡΜΟΓΗ</button>
+        </form>
         <br>
         
-        <section class="matrix">
+        <?php
+            // Αρχικοποιούμε τις μεταβλητές.
+            $county = '0';
+            $fuel = '0';
+            // Έλεγχος αν τα φίλτρα ενεργοποιήθηκαν
+            if(isset($_GET['search'])) {
+                // Λαμβάνουμε τις τιμές από τη φόρμα των φίλτρων
+                $county = $_GET['County'];
+                $fuel = $_GET['Fuel'];
+            }
+
+            // Κάνουμε JOIN το πίνακα offers με τους πίνακες users και counties ώστε να εμφανίσουμε τις ενεργείς προσφορές
+            $query = "SELECT * FROM offers 
+                      INNER JOIN users ON offers.UserID = users.UserID
+                      WHERE FuelID = $fuel AND CountyID = $county AND ExpirationDate > NOW() ORDER BY Price ASC";
+            $result = mysqli_query($conn, $query);
+            if (!$result) {
+                die("Το ερώτημα απέτυχε!");
+            }
+        ?>
+
+        <section class="search-results">
             <h1>Αποτελέσματα</h1>
             <hr>
             <table>
-                <tr class="main-row">
-                    <td>α/α</td>
-                    <td>Επωνυμία</td>
-                    <td>Διεύθυνση</td>
-                    <td>Τύπος Καυσίμου</td>
-                    <td>Τιμή</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Aegean</td>
-                    <td><a href="https://goo.gl/maps/BYSqKcpeNUY7TBqC8">Ηλία Ηλιού 18, Αθήνα</a></td>
-                    <td>Αμόλυβδη 95</td>
-                    <td>1,85€</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>EKO</td>
-                    <td><a href="https://goo.gl/maps/vPVMEUYdqMoAyvRQ9">Εφέσου 37, Νέα Σμύρνη</a></td>
-                    <td>Αμόλυβδη 95</td>
-                    <td>1,86€</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+                <tbody>
+                    <?php
+                        if(mysqli_num_rows($result) > 0) {
+                        // Εμφάνιση των αποτελεσμάτων
+                        echo "<table>";
+                        echo "<tr><th>Επωνυμία Επιχείρησης | </th><th>Διεύθυνση Επιχείρησης | </th><th>Τιμή Καυσίμου (€) | </th><th>Λήξης Προσφοράς</th></tr>";
+                        while($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>" . $row['BrandName'] . "</td>";
+                            // Η διεύθυνση της επιχείρησης ανοίγει νέα κατρέλα στο Goggle Maps
+                            echo "<td> <a href='https://www.google.com/maps/place/" . urlencode($row['Address']) . "' target='_blank'>" . $row['Address'] . "</a> </td>";
+                            echo "<td>" . $row['Price'] . "</td>";
+                            echo "<td>" . $row['ExpirationDate'] . "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</table>";
+                    }
+                ?>
         </section>
         <br><br>
         <footer>

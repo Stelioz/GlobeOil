@@ -107,8 +107,7 @@
                       WHERE u.Username = '$username'";
             $result = mysqli_query($conn, $query);
             if (!$result) {
-                printf("Error: %s\n", mysqli_error($conn));
-                exit();
+                die("Το ερώτημα απέτυχε!");
             }
 
             // Κάνουμε αντιστήχηση των δεδομένων σε μεταβλητές 
