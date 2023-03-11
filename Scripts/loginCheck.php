@@ -17,15 +17,18 @@
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Επιλέγουμε τις τιμές από τον πίνακα users
-    $sql = "SELECT * FROM users WHERE Username='$username' AND Password='$password'";
-    $result = mysqli_query($conn, $sql);
+    // Επιλέγουμε τις κατάλληλες τιμές από τον πίνακα users
+    $sql_registered = "SELECT * FROM users WHERE Username='$username' AND Password='$password' AND Role IS NOT NULL";
+    $result_registered = mysqli_query($conn, $sql_registered);
 
     // Έλεγχος αν ο user είναι καταχωρημένος
-    if (mysqli_num_rows($result) == 1) {
+    if (mysqli_num_rows($result_registered) == 1) {
+        // Λαμβάνουμε την εγγραφή του χρήστη από το αποτέλεσμα του ερωτήματος
+        $row = mysqli_fetch_assoc($result_registered);
         // Μεταβάλουμε τις μεταβλητές
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
+        $_SESSION['role'] = $row['Role']; // Αποθηκεύουμε τον ρόλο του χρήστη στο session
         // Ανακατεύθυνση στην σελίδα προσφορών
         header("Location: ../offer.php");
     } else {
