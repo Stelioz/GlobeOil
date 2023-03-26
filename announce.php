@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Συμβατρότητα Σελίδας στους Browsers -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Αρχικοποίηση Σελίδας στον Browser -->
     <title> Globe Oil </title> <!-- Τίτλος Σελίδας -->
-    <link rel="stylesheet" href="css/styles.css"> <!-- Σύνδεση με την CSS -->
+    <link rel="stylesheet" href="css/announce.css"> <!-- Σύνδεση με την CSS -->
     
     <script src="Scripts/deleteAnnounce.js"></script>
     <script src="Scripts/createAnnounce.js"></script>
@@ -38,12 +38,12 @@
                 </div>
 
                 <!-- Κουμπί Εισόδου / Εξόδου -->
-                <div class="login_button">
+                <div>
                     <?php
                         // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
                         if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                             // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
-                            echo '<div class="login_button">';
+                            echo '<div class="logout_button">';
                             echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
                             echo '</div>';
                         } else {
@@ -93,43 +93,43 @@
   <span>
     <h1>Ανακοινώσεις</h1> 
     <?php
-    // Show the "New Announcement" button only if the user is an administrator
+    // Εμφάνιση του κουμπιού για Νέα Ανακοίωνση μόνο για τους Διαχειριστές
     if ($is_admin == true) {
-        echo '<button onclick="openForm()">New Announcement</button>';
+        echo '<button onclick="openForm()">Νέα Ανακοίνωση</button>';
     }
     ?>
     <hr>
   </span>
-
+  
   <?php
-  // Display the Announcements
+  // Εμφάνιση Ανακοινώσεων
   if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
       echo "<div id='" . $row["AnnouncementID"] . "'>";
       echo "<h2>" . $row["Title"] . "</h2>";
+      echo "<p>Ημερομηνία Ανάρτησης: " . $row["RegistrationDate"] . "</p>";
       echo "<p>" . $row["Text"] . "</p>";
-      echo "<p>Registration Date: " . $row["RegistrationDate"] . "</p>";
-
-      // Show the "Delete Announcement" button only if the user is an administrator
+      
+      // Εμφάνιση του κουμπιού για Διαγραφή Ανακοίνωσης μόνο για τους Διαχειριστές
       if ($is_admin == true) {
-        echo "<button onclick='deleteAnnouncement(" . $row["AnnouncementID"] . ")'>Delete Announcement</button>";
+        echo "<button onclick='deleteAnnouncement(" . $row["AnnouncementID"] . ")'>Διαγραφή Ανακοίνωσης</button>";
       }
-
+      echo "<p> <br> </p>";
       echo "</div>";
     }
 
-    // Code to delete announcement when delete button is clicked
+    // Έναρξη της διαγραφής εφόσον πατηθεί το κουμπί Διαγραφή Ανακοίνωσης
     if (isset($_POST['delete_announcement'])) {
       $delete_id = $_POST['delete_announcement'];
       $sql = "DELETE FROM announcements WHERE AnnouncementID = $delete_id";
       if (mysqli_query($conn, $sql)) {
-        echo "Announcement deleted successfully";
+        echo "Η ανακοίνωση διαγράφηκε!";
       } else {
-        echo "Error deleting announcement: " . mysqli_error($conn);
+        echo "Σφάλμα κατά τη διαγραφή: " . mysqli_error($conn);
       }
     }
   } else {
-    echo "No announcements found.";
+    echo "Δεν βρέθηκαν ανακοινωσεις!";
   }
   ?>
 
