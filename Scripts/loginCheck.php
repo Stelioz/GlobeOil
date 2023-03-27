@@ -16,9 +16,9 @@
     // Λαμβάνουμε τα username και password από τη φόρμα
     $username = $_POST['username'];
     $password = $_POST['password'];
-
+    
     // Επιλέγουμε τις κατάλληλες τιμές από τον πίνακα users
-    $sql_registered = "SELECT * FROM users WHERE Username='$username' AND Password='$password' AND Role IS NOT NULL";
+    $sql_registered = "SELECT * FROM users WHERE Username='$username' AND BINARY Password='$password' AND Role IS NOT NULL";
     $result_registered = mysqli_query($conn, $sql_registered);
 
     // Έλεγχος αν ο user είναι καταχωρημένος

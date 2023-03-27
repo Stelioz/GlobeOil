@@ -185,15 +185,28 @@
                 $date = $_POST["ExpirationDate"];
                 $price = $_POST["Price"];
 
+                $sql = "SELECT * FROM offers WHERE UserID = '$user_id' AND FuelID = '$fuel_id' AND ExpirationDate > DATE(NOW())";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) == 0) {
                 // Προετοιμασία για εισαγωγή της νέας προσφοράς στη Βάση Δεδομένων
                 $sql = "INSERT INTO offers (UserID, FuelID, ExpirationDate, Price) VALUES ('$user_id', '$fuel_id', '$date', '$price')";
-                
                 // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
                 if (!mysqli_query($conn, $sql)) {
                     die("Ανεπιτυχής εγγραφή!");
                 } else {
                     echo "Επιτυχής εγγραφή!";
                 }
+                } else {
+                $sql = "UPDATE offers SET Price = '$price' , ExpirationDate = '$date' WHERE UserID = '$user_id' AND FuelID = '$fuel_id'";
+                // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
+                if (!mysqli_query($conn, $sql)) {
+                    die("Δεν ενημερώθηκε η εγγραφή!");
+                } else {
+                    echo "Ενημερώθηκε η εγγραφή!";
+                }
+                }
+
+                
                 
                 $conn->close();     
             }

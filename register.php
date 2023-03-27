@@ -174,8 +174,12 @@
 
                 // Αυτόματη ανάθεση τιμής για τη στήλη Role
                 $role = "Επιχείρηση";
-
+                
                 // Προετοιμασία για εισαγωγή του νεου χρήστη στη Βάση Δεδομένων
+                $sql = "SELECT VAT FROM users WHERE VAT = '$vat'";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) == 0) {                   
+                
                 $sql = "INSERT INTO users (BrandName, VAT, Address, MunicipalityID, CountyID, Email, Role, Username, Password) VALUES ('$brandName', '$vat', '$address', '$municipality', '$county', '$email', '$role', '$username', '$password' )";
                 
                 // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
@@ -184,7 +188,8 @@
                 } else {
                     echo "Επιτυχής εγγραφή!";
                 }
-
+                }
+                
                 $conn->close();    
             }
         ?>
