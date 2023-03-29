@@ -97,9 +97,9 @@
             <hr>
         </section>
         <form method="get">
-            <span class="County">
-                <span class="left-item"> Νομός: </span>
-                <span class="right-item">
+            <span class="County-search">
+                <span class="left-item-search"> Νομός: </span>
+                <span class="right-item-search">
                     <select id="dropdown-menu3" name='County'> <!-- Χρηση Dropdown Menu για τους Νομούς -->
                         <?php foreach ($counties as $id => $name) : ?>
                             <option value="<?php echo $id; ?>" <?php if (isset($_GET['County']) && $_GET['County'] == $id) echo 'selected'; ?>> <?php echo $name; ?> </option>
@@ -107,9 +107,9 @@
                     </select>
                 </span>
             </span>
-            <span class="Fuels">
-                <span class="left-item"> Καύσιμο: </span>
-                <span class="right-item">
+            <span class="Fuels-search">
+                <span class="left-item-search"> Καύσιμο: </span>
+                <span class="right-item-search">
                     <select id="dropdown-menu4" name='Fuel'> <!-- Χρηση Dropdown Menu για τα Καύσιμα -->
                         <?php foreach ($fuels as $id => $name) : ?>
                             <option value="<?php echo $id; ?>" <?php if (isset($_GET['Fuel']) && $_GET['Fuel'] == $id) echo 'selected'; ?>> <?php echo $name; ?> </option>
@@ -151,7 +151,7 @@
                     if (mysqli_num_rows($result) > 0) {
                         // Εμφάνιση των αποτελεσμάτων
                         echo "<table>";
-                        echo "<tr><th>Επωνυμία Επιχείρησης | </th><th>Διεύθυνση Επιχείρησης | </th><th>Τιμή Καυσίμου (€) | </th><th>Λήξης Προσφοράς</th></tr>";
+                        echo "<tr><th>Επωνυμία Επιχείρησης</th><th>Διεύθυνση Επιχείρησης</th><th>Τιμή Καυσίμου (€)</th><th>Λήξης Προσφοράς</th></tr>";
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>";
                             echo "<td>" . $row['BrandName'] . "</td>";

@@ -129,32 +129,31 @@
         <form method="post" name="myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="offerForm" onsubmit="return validateSubmit()">
             <!-- Γίνεται αυτόματη συμπλήρωση ορισμένων στοιχείων μέσα από τη Βάση Δεδομένων -->
             <div class="UserID">
-                <span class="right-item"><input type="number" name="UserID" value="<?php echo "$user_id" ?>" readonly></span>
+                <span class="right-item-offer"><input type="number" name="UserID" value="<?php echo "$user_id" ?>" readonly hidden></span>
             </div>
             <div class="BrandName">
-                <span class="left-item">Επωνυμία Επιχείρησης:</span>
-                <span class="right-item"><input type="text" name="BrandName" value="<?php echo "$brandName" ?>" readonly></span>
+                <span class="left-item-offer">Επωνυμία Επιχείρησης:</span>
+                <span class="right-item-offer"><input type="text" name="BrandName" value="<?php echo "$brandName" ?>" readonly></span>
             </div>
             <div class="VAT">
-                <span class="left-item">A.Φ.Μ.:</span>
-                <span class="right-item"><input type="text" name="VAT" value="<?php echo "$vat" ?>" readonly></span>
-                <span class="right-item"></span>
+                <span class="left-item-offer">A.Φ.Μ.:</span>
+                <span class="right-item-offer"><input type="text" name="VAT" value="<?php echo "$vat" ?>" readonly></span>
             </div>
             <div class="Address">
-                <span class="left-item">Διεύθυνση:</span>
-                <span class="right-item"><input type="text" name="Address" value="<?php echo "$address" ?>" readonly></span>
+                <span class="left-item-offer">Διεύθυνση:</span>
+                <span class="right-item-offer"><input type="text" name="Address" value="<?php echo "$address" ?>" readonly></span>
             </div>
             <div class="Municipality">
-                <span class="left-item">Δήμος:</span>
-                <span class="right-item"><input type="text" name="Municipality" value="<?php echo "$municipality" ?>" readonly></span>
+                <span class="left-item-offer">Δήμος:</span>
+                <span class="right-item-offer"><input type="text" name="Municipality" value="<?php echo "$municipality" ?>" readonly></span>
             </div>
             <div class="County">
-                <span class="left-item">Νομός:</span>
-                <span class="right-item"><input type="text" name="County" value="<?php echo "$county" ?>" readonly></span>
+                <span class="left-item-offer">Νομός:</span>
+                <span class="right-item-offer"><input type="text" name="County" value="<?php echo "$county" ?>" readonly></span>
             </div>
             <div class="Fuels">
-                <span class="left-item">Είδος Καυσίμου:</span>
-                <span class="right-item">
+                <span class="left-item-offer">Είδος Καυσίμου:</span>
+                <span class="right-item-offer">
                     <select id="dropdown-menu3" name='Fuels'> <!-- Χρηση Dropdown Menu για τα καύσιμα -->
                         <?php foreach ($fuels as $id => $name) : ?>
                             <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
@@ -164,17 +163,18 @@
             </div>
             <!-- Ο χρήστης πρέπει να εισάγει χειροκίνητα το Price και το ExpirationDate -->
             <div class="Price">
-                <span class="left-item">Τιμή σε €:</span>
-                <span class="right-item"> <input type="text" name='Price'> </span>
+                <span class="left-item-offer">Τιμή σε €:</span>
+                <span class="right-item-offer"> <input type="text" name='Price'> </span>
             </div>
             <div class="ExpirationDate">
-                <span class="left-item">Ημερομηνία Λήξης Προσφοράς:</span>
-                <span class="right-item"> <input type="date" name='ExpirationDate'> </span>
+                <span class="left-item-offer">Ημερομηνία Λήξης Προσφοράς:</span>
+                <span class="right-item-offer"> <input type="date" name='ExpirationDate'> </span>
             </div>
             <br>
-            <div class="SubButton">
-                <span class="right-text"></span>
-                <input type="submit" name="submit" value="Καταχώρηση">
+            <div>
+                <span class="left-button-offer"> </span>
+                <span class="center-button-offer"> <input class="SubButton" type="submit" name="submit" value="Καταχώρηση"> </span>
+                <span class="right-button-offer"> </span>
             </div>
         </form>
 

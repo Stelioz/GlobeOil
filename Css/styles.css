@@ -1,4 +1,4 @@
-/* START OF HEADER */
+/* START CSS OF HEADER */
 header {
     width: 100%;
     display: inline-block;
@@ -80,10 +80,10 @@ nav>ul>li>a.current {
     font-weight: bolder;
     background-color: lightgray;
 }
-/* END OF HEADER */
+/* END CSS OF HEADER */
 
 
-/* START OF FOOTER */
+/* START CSS OF FOOTER */
 footer {
     width: 100%;
     display: flex;
@@ -109,7 +109,7 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;   
 }
-/* END OF FOOTER */
+/* END CSS OF FOOTER */
 
 body {
     width: 100%;
@@ -149,3 +149,175 @@ h3 {
     font-size: small;
     color: black;
 }
+
+/* START CSS LOGIN */
+.text {
+    width: 110%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.name {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.pass {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sub-button {
+    width: 120%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-item {
+    width: 300px;
+    padding-left: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.center-item {
+    width: 250px;
+    padding-top: 10px;
+    padding-bottom: 10px;   
+}
+
+.right-item {
+    width: 100px;
+    padding-right: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;   
+}
+
+.sumbit-button {
+    width: 100px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;  
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: rgb(131, 26, 26);
+}
+/* END CSS LOGIN */
+
+/* START CSS OFFER*/
+.BrandName {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+
+.VAT, .Address, .Municipality, .County, .Fuels, .Price, .ExpirationDate {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.SubButton {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    background-color: rgb(131, 26, 26);
+    }
+
+.left-button-offer {
+    width: 300px;
+    padding-left: 200px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.center-button-offer {
+    width: 300px;
+    padding-left: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.right-button-offer {
+    width: 300px;
+    padding-right: 200px;
+    padding-top: 10px;
+    padding-bottom: 10px;   
+}
+
+.left-item-offer {
+    width: 300px;
+    padding-left: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.right-item-offer {
+    width: 100px;
+    padding-right: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;   
+}
+/* END CSS OFFER*/
+
+/* START CSS SEARCH*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-height: 400px;
+    overflow-y: scroll;
+  }
+  
+th, td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: center;
+  }
+
+.County-search, .Fuels-search {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.left-item-search, .right-item-search {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.left-item-search {
+  margin-right: 10px;
+}
+
+.search-button {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+    background-color: rgb(131, 26, 26); 
+}
+/* END CSS SEARCH*/
