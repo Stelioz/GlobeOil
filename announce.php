@@ -136,15 +136,15 @@
             <!-- Εμφάνιση φόρμας για δημιουργία νέας ανακοίνωσης -->
             <div id="announcementForm" class="form-popup" style="display:none">
                 <form class="form-container" onsubmit="createAnnouncement(); return false;">
-                    <h1>New Announcement</h1>
-                    <label for="title"><b>Title</b></label>
+                    <h1>Νέα Ανακοίνωση</h1>
+                    <label for="title"><b>Τίτλος</b></label>
                     <input class ="ann-title" type="text" placeholder="Enter Title" name="title" required>
 
-                    <label for="text"><b>Text</b></label>
+                    <label for="text"><b>Κείμενο</b></label>
                     <textarea class="ann-text" placeholder="Enter Text" name="text" required></textarea>
 
-                    <button type="submit" class="btn">Submit</button>
-                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                    <button type="submit" class="btn">ΚΑΤΑΧΩΡΗΣΗ</button>
+                    <button type="button" class="btn cancel" onclick="closeForm()">ΑΚΥΡΩΣΗ</button>
                 </form>
             </div>
 
