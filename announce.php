@@ -138,10 +138,10 @@
                 <form class="form-container" onsubmit="createAnnouncement(); return false;">
                     <h1>New Announcement</h1>
                     <label for="title"><b>Title</b></label>
-                    <input type="text" placeholder="Enter Title" name="title" required>
+                    <input class ="ann-title" type="text" placeholder="Enter Title" name="title" required>
 
                     <label for="text"><b>Text</b></label>
-                    <textarea placeholder="Enter Text" name="text" required></textarea>
+                    <textarea class="ann-text" placeholder="Enter Text" name="text" required></textarea>
 
                     <button type="submit" class="btn">Submit</button>
                     <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
