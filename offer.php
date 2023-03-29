@@ -13,49 +13,49 @@
 </head>
 
 <body> <!-- Σώμα Σελίδας -->
-    
+
     <!-- Περιορισμός πρόσβασης στους ανώνυμους χρήστες -->
     <?php
-        // Αρχίζει το session για τον έλεγχο εισόδου / εξόδου
-        session_start();
-        if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-            // Γίνεται ανακατεύθυνση στην σελίδα εισόδου
-            header('location: login.php');
-            exit;
-        }
+    // Αρχίζει το session για τον έλεγχο εισόδου / εξόδου
+    session_start();
+    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+        // Γίνεται ανακατεύθυνση στην σελίδα εισόδου
+        header('location: login.php');
+        exit;
+    }
     ?>
 
     <div class="wrapper">
-        
-        <header> <!-- Κεφαλίδα της Σελίδας-->            
+
+        <header> <!-- Κεφαλίδα της Σελίδας-->
             <!-- 1o Section του Header που αποτελείται από το Λογότυπο, το Μότο και το Κουμπί Εισόδου -->
             <section class="upper_section">
                 <!-- Λογότυπο Σελίδας -->
                 <div class="logo">
                     <a href="index.php"> <img src="Photos/GlobeOilLogoM.png" alt="Logo"> </a>
                 </div>
-                
+
                 <!--Μότο Σελίδας -->
                 <div class="moto">
-                    <h1> G L O B E&nbsp;&nbsp;&nbsp;O I L  </h1>
+                    <h1> G L O B E&nbsp;&nbsp;&nbsp;O I L </h1>
                     <h2> Το Μέλλον Στη Διανομή Καυσίμων </h2>
                 </div>
 
                 <!-- Κουμπί Εισόδου / Εξόδου -->
                 <div class="login_button">
                     <?php
-                        // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
-                        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-                            // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
-                            echo '<div class="login_button">';
-                            echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
-                            echo '</div>';
-                        } else {
-                            // Αν δεν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εισόδου
-                            echo '<div class="login_button">';
-                            echo '<a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>';
-                            echo '</div>';
-                        }
+                    // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
+                    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+                        // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
+                        echo '<div class="login_button">';
+                        echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
+                        echo '</div>';
+                    } else {
+                        // Αν δεν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εισόδου
+                        echo '<div class="login_button">';
+                        echo '<a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>';
+                        echo '</div>';
+                    }
                     ?>
             </section>
 
@@ -74,51 +74,51 @@
         </header>
 
         <?php
-            // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
-            $conn = mysqli_connect("localhost", "root", "password");
-            if (!$conn) {
-                die("Η σύνδεση απέτυχε!");
-            }
+        // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
+        $conn = mysqli_connect("localhost", "root", "password");
+        if (!$conn) {
+            die("Η σύνδεση απέτυχε!");
+        }
 
-            // Επιλογή της Βάσης Δεδομένων zindros_database
-            if (!mysqli_select_db($conn, "zindros_database")) {
-                die("Η Βάση Δεδομένων δεν βρέθηκε!");
-            }
+        // Επιλογή της Βάσης Δεδομένων zindros_database
+        if (!mysqli_select_db($conn, "zindros_database")) {
+            die("Η Βάση Δεδομένων δεν βρέθηκε!");
+        }
 
-            // Επιλέγουμε τα καύσιμα
-            $result_fuels = mysqli_query($conn, "SELECT * FROM fuels");
-            if (!$result_fuels) {
-                die("Το ερώτημα απέτυχε!");
-            }
+        // Επιλέγουμε τα καύσιμα
+        $result_fuels = mysqli_query($conn, "SELECT * FROM fuels");
+        if (!$result_fuels) {
+            die("Το ερώτημα απέτυχε!");
+        }
 
-            // Τοποθετούμε τα καύσιμα σε πίνακες
-            $fuels = array();
-            while ($row = $result_fuels->fetch_assoc()) {
-                $fuels[$row['FuelID']] = $row['FuelName'];
-            }
+        // Τοποθετούμε τα καύσιμα σε πίνακες
+        $fuels = array();
+        while ($row = $result_fuels->fetch_assoc()) {
+            $fuels[$row['FuelID']] = $row['FuelName'];
+        }
 
-            // Ανακτούμε τα δεδομένα από τη βάση δεδομένων ώστε να εισάγουμε αυτόματα στη φόρμα
-            $username = $_SESSION['username'];
-            // Κάνουμε JOIN το πίνακα users με τους πίνακες municipalities και counties ώστε να εμφανίσουμε τα ονόματα των Δήμων και των Νομών
-            $query = "SELECT u.UserID, u.BrandName, u.VAT, u.Address, m.MunicipalityName, c.CountyName FROM users u 
+        // Ανακτούμε τα δεδομένα από τη βάση δεδομένων ώστε να εισάγουμε αυτόματα στη φόρμα
+        $username = $_SESSION['username'];
+        // Κάνουμε JOIN το πίνακα users με τους πίνακες municipalities και counties ώστε να εμφανίσουμε τα ονόματα των Δήμων και των Νομών
+        $query = "SELECT u.UserID, u.BrandName, u.VAT, u.Address, m.MunicipalityName, c.CountyName FROM users u 
                       INNER JOIN municipalities m ON u.MunicipalityID = m.MunicipalityID 
                       INNER JOIN counties c ON u.CountyID = c.CountyID 
                       WHERE u.Username = '$username'";
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                die("Το ερώτημα απέτυχε!");
-            }
+        $result = mysqli_query($conn, $query);
+        if (!$result) {
+            die("Το ερώτημα απέτυχε!");
+        }
 
-            // Κάνουμε αντιστήχηση των δεδομένων σε μεταβλητές 
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $user_id = $row["UserID"];
-                $brandName = $row["BrandName"];
-                $vat = $row["VAT"];
-                $address = $row["Address"];
-                $municipality = $row["MunicipalityName"];
-                $county = $row["CountyName"];
-            }   
+        // Κάνουμε αντιστήχηση των δεδομένων σε μεταβλητές 
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $user_id = $row["UserID"];
+            $brandName = $row["BrandName"];
+            $vat = $row["VAT"];
+            $address = $row["Address"];
+            $municipality = $row["MunicipalityName"];
+            $county = $row["CountyName"];
+        }
         ?>
 
         <section class="offer">
@@ -126,7 +126,7 @@
             <hr>
         </section>
         <!-- Φόρμα καταχώρησης στοιχείων, γίνεται κλήση της validateSubmit() -->
-        <form method="post" name= "myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="offerForm" onsubmit="return validateSubmit()">
+        <form method="post" name="myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="offerForm" onsubmit="return validateSubmit()">
             <!-- Γίνεται αυτόματη συμπλήρωση ορισμένων στοιχείων μέσα από τη Βάση Δεδομένων -->
             <div class="UserID">
                 <span class="right-item"><input type="number" name="UserID" value="<?php echo "$user_id" ?>" readonly></span>
@@ -156,8 +156,8 @@
                 <span class="left-item">Είδος Καυσίμου:</span>
                 <span class="right-item">
                     <select id="dropdown-menu3" name='Fuels'> <!-- Χρηση Dropdown Menu για τα καύσιμα -->
-                        <?php foreach ($fuels as $id => $name): ?>
-                        <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
+                        <?php foreach ($fuels as $id => $name) : ?>
+                            <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -180,18 +180,18 @@
 
         <!-- Κώδικας PHP για καταχώρηση των στοιχείων στην Βάση Δεδομένων -->
         <?php
-            if (isset($_POST["submit"])) {
-                // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
-                $user_id = $_POST["UserID"];
-                $fuel_id = $_POST["Fuels"];
-                $date = $_POST["ExpirationDate"];
-                $price = $_POST["Price"];
+        if (isset($_POST["submit"])) {
+            // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
+            $user_id = $_POST["UserID"];
+            $fuel_id = $_POST["Fuels"];
+            $date = $_POST["ExpirationDate"];
+            $price = $_POST["Price"];
 
-                // Επιλογή των κατάλληλων παραμέτρων
-                $sql = "SELECT * FROM offers WHERE UserID = '$user_id' AND FuelID = '$fuel_id' AND ExpirationDate > DATE(NOW())";
-                $result = mysqli_query($conn, $sql);
-                // Έλεγχος αν υπάρχει προσφορά και εισαγωγή ή ενημέρωση αυτής
-                if (mysqli_num_rows($result) == 0) {
+            // Επιλογή των κατάλληλων παραμέτρων
+            $sql = "SELECT * FROM offers WHERE UserID = '$user_id' AND FuelID = '$fuel_id' AND ExpirationDate > DATE(NOW())";
+            $result = mysqli_query($conn, $sql);
+            // Έλεγχος αν υπάρχει προσφορά και εισαγωγή ή ενημέρωση αυτής
+            if (mysqli_num_rows($result) == 0) {
                 // Προετοιμασία για εισαγωγή της νέας προσφοράς στη Βάση Δεδομένων
                 $sql = "INSERT INTO offers (UserID, FuelID, ExpirationDate, Price) VALUES ('$user_id', '$fuel_id', '$date', '$price')";
                 // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
@@ -200,7 +200,7 @@
                 } else {
                     echo "Επιτυχής εγγραφή!";
                 }
-                } else {
+            } else {
                 $sql = "UPDATE offers SET Price = '$price' , ExpirationDate = '$date' WHERE UserID = '$user_id' AND FuelID = '$fuel_id'";
                 // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
                 if (!mysqli_query($conn, $sql)) {
@@ -208,14 +208,12 @@
                 } else {
                     echo "Ενημερώθηκε η εγγραφή!";
                 }
-                }
-
-                $conn->close();     
             }
-        ?>
 
+            $conn->close();
+        }
+        ?>
         <br><br>
-        
         <footer>
             <span class="left-text"><a href="C:\Users\steal\Documents\Visual Code\HTML Projects\Globe Oil\Pdf\Oroi.pdf" target="_blank"> « Όροι Χρήσης »</a></span>
             <span class="separator">|</span>

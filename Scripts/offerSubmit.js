@@ -5,12 +5,12 @@ function validateSubmit() {
 
   // AJAX request αν τα UserID και FuelID υπάρχουν στην Bάση Δεδομένων
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
+  xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-        if (this.responseText == "exists") {
-          alert("Υπάρχει ήδη παρόμοια προσφορά στη βάση δεδομένων!");
-          return false;
-        }
+      if (this.responseText == "exists") {
+        alert("Υπάρχει ήδη παρόμοια προσφορά στη βάση δεδομένων!");
+        return false;
+      }
     }
   }
 

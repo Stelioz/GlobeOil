@@ -15,38 +15,38 @@
 
 <body> <!-- Σώμα Σελίδας -->
     <div class="wrapper">
-        
-        <header> <!-- Κεφαλίδα της Σελίδας-->            
+
+        <header> <!-- Κεφαλίδα της Σελίδας-->
             <!-- 1o Section του Header που αποτελείται από το Λογότυπο, το Μότο και το Κουμπί Εισόδου -->
             <section class="upper_section">
                 <!-- Λογότυπο Σελίδας -->
                 <div class="logo">
                     <a href="index.php"> <img src="Photos/GlobeOilLogoM.png" alt="Logo"> </a>
                 </div>
-                
+
                 <!--Μότο Σελίδας -->
                 <div class="moto">
-                    <h1> G L O B E&nbsp;&nbsp;&nbsp;O I L  </h1>
+                    <h1> G L O B E&nbsp;&nbsp;&nbsp;O I L </h1>
                     <h2> Το Μέλλον Στη Διανομή Καυσίμων </h2>
                 </div>
 
                 <!-- Κουμπί Εισόδου / Εξόδου -->
                 <div class="login_button">
                     <?php
-                        // Αρχίζει το session για τον έλεγχο εισόδου / εξόδου
-                        session_start();
-                        // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
-                        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-                            // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
-                            echo '<div class="login_button">';
-                            echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
-                            echo '</div>';
-                        } else {
-                            // Αν δεν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εισόδου
-                            echo '<div class="login_button">';
-                            echo '<a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>';
-                            echo '</div>';
-                        }
+                    // Αρχίζει το session για τον έλεγχο εισόδου / εξόδου
+                    session_start();
+                    // Έλεγχος αν ο χρήστης είναι συνδεδεμένος ή όχι
+                    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+                        // Αν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εξόδου
+                        echo '<div class="login_button">';
+                        echo '<a href="Scripts/logoutCheck.php" target="_self" title="Logout"> <button class="logout"> ΕΞΟΔΟΣ </button> </a>';
+                        echo '</div>';
+                    } else {
+                        // Αν δεν είναι συνδεδεμένος, εμφανίζουμε το κουμπί εισόδου
+                        echo '<div class="login_button">';
+                        echo '<a href="login.php" target="_self" title="Login Page"> <button class="login"> ΕΙΣΟΔΟΣ </button> </a>';
+                        echo '</div>';
+                    }
                     ?>
                 </div>
             </section>
@@ -63,45 +63,45 @@
                 </nav>
             </section>
         </header>
-        
-        <?php           
-            $conn = mysqli_connect("localhost", "root", "password");
-            if (!$conn) {
-                die("Η σύνδεση απέτυχε!");
-            }
-    
-            if (!mysqli_select_db($conn, "zindros_database")) {
-                die("Η Βάση Δεδομένων δεν βρέθηκε!");
-            }
 
-            // Επιλέγουμε τους Δήμους και τους Νομούς
-            $result_municipalities = mysqli_query($conn, "SELECT * FROM municipalities");
-            if (!$result_municipalities) {
-                die("Το ερώτημα απέτυχε!");
-            }
-            $result_counties = mysqli_query($conn, "SELECT * FROM counties");
-            if (!$result_counties) {
-                die("Το ερώτημα απέτυχε!");
-            }
+        <?php
+        $conn = mysqli_connect("localhost", "root", "password");
+        if (!$conn) {
+            die("Η σύνδεση απέτυχε!");
+        }
 
-            // Τοποθετούμε τους Δήμους και τους Νομούς σε πίνακες
-            $municipalities = array();
-            $counties = array();
-            while ($row = $result_municipalities->fetch_assoc()) {
-                $municipalities[$row['MunicipalityID']] = $row['MunicipalityName'];
-            }           
-            while ($row = $result_counties->fetch_assoc()) {
-                $counties[$row['CountyID']] = $row['CountyName'];
-            }
+        if (!mysqli_select_db($conn, "zindros_database")) {
+            die("Η Βάση Δεδομένων δεν βρέθηκε!");
+        }
+
+        // Επιλέγουμε τους Δήμους και τους Νομούς
+        $result_municipalities = mysqli_query($conn, "SELECT * FROM municipalities");
+        if (!$result_municipalities) {
+            die("Το ερώτημα απέτυχε!");
+        }
+        $result_counties = mysqli_query($conn, "SELECT * FROM counties");
+        if (!$result_counties) {
+            die("Το ερώτημα απέτυχε!");
+        }
+
+        // Τοποθετούμε τους Δήμους και τους Νομούς σε πίνακες
+        $municipalities = array();
+        $counties = array();
+        while ($row = $result_municipalities->fetch_assoc()) {
+            $municipalities[$row['MunicipalityID']] = $row['MunicipalityName'];
+        }
+        while ($row = $result_counties->fetch_assoc()) {
+            $counties[$row['CountyID']] = $row['CountyName'];
+        }
         ?>
 
         <section class="offer">
             <h1>Εγγραφή Επιχείρησης</h1>
             <hr>
         </section>
-        
+
         <!-- Φόρμα καταχώρησης χρήστη, γίνεται κλήση των validateVAT και validateForm -->
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="myForm" onsubmit="return validateVAT() && validateForm()">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="myForm" onsubmit="return validateVAT() && validateForm()">
             <div class="BrandName">
                 <span class="left-item"> Επωνυμία Επιχείρησης: </span>
                 <span class="right-item"> <input type="text" name='BrandName'> </span>
@@ -118,8 +118,8 @@
                 <span class="left-item"> Δήμος: </span>
                 <span class="right-item">
                     <select id="dropdown-menu1" name='Municipality'> <!-- Χρηση Dropdown Menu για τους Δήμους -->
-                        <?php foreach ($municipalities as $id => $name): ?>
-                        <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
+                        <?php foreach ($municipalities as $id => $name) : ?>
+                            <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -128,8 +128,8 @@
                 <span class="left-item"> Νομός: </span>
                 <span class="right-item">
                     <select id="dropdown-menu2" name='County'> <!-- Χρηση Dropdown Menu για τους Νομούς -->
-                        <?php foreach ($counties as $id => $name): ?>
-                        <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
+                        <?php foreach ($counties as $id => $name) : ?>
+                            <option value="<?php echo $id; ?>"> <?php echo $name; ?> </option>
                         <?php endforeach; ?>
                     </select>
                 </span>
@@ -153,48 +153,46 @@
             </div>
             <br>
             <div class="SubButton">
-                <span class="right-text"> </span>            
+                <span class="right-text"> </span>
                 <input type="submit" name="submit" value="Καταχώρηση">
             </div>
         </form>
-        
+
         <!-- Κώδικας PHP για καταχώρηση των στοιχείων στην Βάση Δεδομένων -->
         <?php
-            if (isset($_POST["submit"])) {
-                // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
-                $brandName = $_POST["BrandName"];
-                $vat = $_POST["VAT"];
-                $address = $_POST["Address"];
-                $municipality = $_POST["Municipality"];
-                $county = $_POST["County"];
-                $email = $_POST["Email"];
-                $username = $_POST["Username"];
-                $password = $_POST["Password"];
+        if (isset($_POST["submit"])) {
+            // Λαμβάνουμε τις τιμές από τη φόρμα καταχώρησης
+            $brandName = $_POST["BrandName"];
+            $vat = $_POST["VAT"];
+            $address = $_POST["Address"];
+            $municipality = $_POST["Municipality"];
+            $county = $_POST["County"];
+            $email = $_POST["Email"];
+            $username = $_POST["Username"];
+            $password = $_POST["Password"];
 
-                // Αυτόματη ανάθεση τιμής για τη στήλη Role
-                $role = "Επιχείρηση";
-                
-                // Προετοιμασία για εισαγωγή του νεου χρήστη στη Βάση Δεδομένων
-                $sql = "SELECT VAT FROM users WHERE VAT = '$vat'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) == 0) {                   
-                
+            // Αυτόματη ανάθεση τιμής για τη στήλη Role
+            $role = "Επιχείρηση";
+
+            // Προετοιμασία για εισαγωγή του νεου χρήστη στη Βάση Δεδομένων
+            $sql = "SELECT VAT FROM users WHERE VAT = '$vat'";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) == 0) {
+
                 $sql = "INSERT INTO users (BrandName, VAT, Address, MunicipalityID, CountyID, Email, Role, Username, Password) VALUES ('$brandName', '$vat', '$address', '$municipality', '$county', '$email', '$role', '$username', '$password' )";
-                
+
                 // Εκτέλση  εντολής εισαγωγής και έλεγχος καταχώρησης
                 if (!mysqli_query($conn, $sql)) {
                     die("Ανεπιτυχής εγγραφή!");
                 } else {
                     echo "Επιτυχής εγγραφή!";
                 }
-                }
-                
-                $conn->close();    
             }
-        ?>
 
+            $conn->close();
+        }
+        ?>
         <br><br>
-        
         <footer>
             <span class="left-text"><a href="C:\Users\steal\Documents\Visual Code\HTML Projects\Globe Oil\Pdf\Oroi.pdf" target="_blank"> « Όροι Χρήσης »</a></span>
             <span class="separator">|</span>

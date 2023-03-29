@@ -16,12 +16,12 @@ function validateForm() {
   if (address == "") {
     alert("Παρακαλούμε συμπληρώστε τη διεύθυνση σας!");
     return false;
- }
+  }
 
- if (email == "") {
-  alert("Παρακαλούμε συμπληρώστε το email σας!");
-  return false;
-}
+  if (email == "") {
+    alert("Παρακαλούμε συμπληρώστε το email σας!");
+    return false;
+  }
 
   if (username == "") {
     alert("Παρακαλούμε συμπληρώστε το Username σας!");
@@ -44,12 +44,12 @@ function validateForm() {
     alert("Ο κωδικός θα πρέπει να έχει μήκος τουλάχιστον 8 χαρακτήρων και να περιέχει 1 κεφαλαίο γράμμα και 1 αριθμό!");
     return false;
   }
-  
+
   // Έλεγχος αν τα password and confirmPassword ταιριάζουν
   if (password !== confirmPassword) {
     alert("Ο κωδικός πρόσβασης και η επιβεβαίωσή του δεν ταιριάζουν!");
     return false;
   }
-  
+
   return true;
 }
