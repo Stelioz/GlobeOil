@@ -82,7 +82,6 @@ nav>ul>li>a.current {
 }
 /* END CSS OF HEADER */
 
-
 /* START CSS OF FOOTER */
 footer {
     width: 100%;
@@ -111,6 +110,7 @@ footer {
 }
 /* END CSS OF FOOTER */
 
+/* START CSS OF INDEX & MAIN ELEMENTS */
 body {
     width: 100%;
     background-color: white;
@@ -149,6 +149,7 @@ h3 {
     font-size: small;
     color: black;
 }
+/* END CSS OF INDEX & MAIN ELEMENTS */
 
 /* START CSS LOGIN */
 .text {
@@ -215,7 +216,7 @@ h3 {
 }
 /* END CSS LOGIN */
 
-/* START CSS OFFER*/
+/* START CSS OFFER & REGISTER */
 .BrandName {
     width: 80%;
     display: flex;
@@ -224,14 +225,14 @@ h3 {
     padding-top: 10px;
 }
 
-.VAT, .Address, .Municipality, .County, .Fuels, .Price, .ExpirationDate {
+.VAT, .Address, .Municipality, .County, .Email, .Username, .Password, .ConfirmPassword, .Fuels, .Price, .ExpirationDate {
     width: 80%;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.SubButton {
+.SubButton, .SubButtonReg {
     font-size: 16px;
     font-weight: bold;
     color: white;
@@ -241,41 +242,41 @@ h3 {
     background-color: rgb(131, 26, 26);
     }
 
-.left-button-offer {
+.left-button-offer, .left-buttonReg {
     width: 300px;
     padding-left: 200px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.center-button-offer {
+.center-button-offer, .center-buttonReg {
     width: 300px;
-    padding-left: 150px;
+    padding-left: 200px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.right-button-offer {
+.right-button-offer, .right-buttonReg {
     width: 300px;
     padding-right: 200px;
     padding-top: 10px;
     padding-bottom: 10px;   
 }
 
-.left-item-offer {
+.left-item-offer, .left-itemReg {
     width: 300px;
     padding-left: 150px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-.right-item-offer {
+.right-item-offer, .right-itemReg {
     width: 100px;
     padding-right: 150px;
     padding-top: 10px;
     padding-bottom: 10px;   
 }
-/* END CSS OFFER*/
+/* END CSS OFFER & REGISTER */
 
 /* START CSS SEARCH*/
 table {

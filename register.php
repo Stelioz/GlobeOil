@@ -103,8 +103,8 @@
         <!-- Φόρμα καταχώρησης χρήστη, γίνεται κλήση των validateVAT και validateForm -->
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" id="myForm" onsubmit="return validateVAT() && validateForm()">
             <div class="BrandName">
-                <span class="left-item"> Επωνυμία Επιχείρησης: </span>
-                <span class="right-item"> <input type="text" name='BrandName'> </span>
+                <span class="left-itemReg"> Επωνυμία Επιχείρησης: </span>
+                <span class="right-itemReg"> <input type="text" name='BrandName'> </span>
             </div>
             <div class="VAT">
                 <span class="left-item"> A.Φ.Μ.: </span>
@@ -133,28 +133,28 @@
                         <?php endforeach; ?>
                     </select>
                 </span>
-                <span class="right-item"></span>
             </div>
             <div class="Email">
-                <span class="left-item"> <label for="password"> Email: </label></span>
-                <span class="right-item"> <input type="email" name='Email'> </span>
+                <span class="left-itemReg"> <label for="password"> Email: </label></span>
+                <span class="right-itemReg"> <input type="email" name='Email'> </span>
             </div>
             <div class="Username">
-                <span class="left-item"> <label for="password"> Username: </label></span>
-                <span class="right-item"> <input type="text" name='Username'> </span>
+                <span class="left-itemReg"> <label for="password"> Username: </label></span>
+                <span class="right-itemReg"> <input type="text" name='Username'> </span>
             </div>
             <div class="Password">
-                <span class="left-item"> <label for="password"> Κωδικός: </label> </span>
-                <span class="right-item"> <input type="password" name='Password'> </span>
+                <span class="left-itemReg"> <label for="password"> Κωδικός: </label> </span>
+                <span class="right-itemReg"> <input type="password" name='Password'> </span>
             </div>
             <div class="ConfirmPassword">
-                <span class="left-item"> <label for="password"> Επιβεβαίωση Κωδικού: </label></span>
-                <span class="right-item"> <input type="password" name='ConfirmPassword'> </span>
+                <span class="left-itemReg"> <label for="password"> Επιβεβαίωση Κωδικού: </label></span>
+                <span class="right-itemReg"> <input type="password" name='ConfirmPassword'> </span>
             </div>
             <br>
-            <div class="SubButton">
-                <span class="right-text"> </span>
-                <input type="submit" name="submit" value="Καταχώρηση">
+            <div>
+                <span class="left-buttonReg"> </span>
+                <span class="center-buttonReg"> <input class="SubButtonReg" type="submit" name="submit" value="Καταχώρηση"> </span>
+                <span class="right-buttonReg"> </span>
             </div>
         </form>
 
