@@ -73,7 +73,6 @@
 
         </header>
 
-        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
         <?php
             // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
             $conn = mysqli_connect("localhost", "root", "password");
@@ -126,7 +125,9 @@
             <h1>Καταχώρηση Προσφοράς</h1>
             <hr>
         </section>
+        <!-- Φόρμα καταχώρησης στοιχείων, γίνεται κλήση της validateSubmit() -->
         <form method="post" name= "myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="offerForm" onsubmit="return validateSubmit()">
+            <!-- Γίνεται αυτόματη συμπλήρωση ορισμένων στοιχείων μέσα από τη Βάση Δεδομένων -->
             <div class="UserID">
                 <span class="right-item"><input type="number" name="UserID" value="<?php echo "$user_id" ?>" readonly></span>
             </div>
@@ -161,6 +162,7 @@
                     </select>
                 </span>
             </div>
+            <!-- Ο χρήστης πρέπει να εισάγει χειροκίνητα το Price και το ExpirationDate -->
             <div class="Price">
                 <span class="left-item">Τιμή σε €:</span>
                 <span class="right-item"> <input type="text" name='Price'> </span>
@@ -185,8 +187,10 @@
                 $date = $_POST["ExpirationDate"];
                 $price = $_POST["Price"];
 
+                // Επιλογή των κατάλληλων παραμέτρων
                 $sql = "SELECT * FROM offers WHERE UserID = '$user_id' AND FuelID = '$fuel_id' AND ExpirationDate > DATE(NOW())";
                 $result = mysqli_query($conn, $sql);
+                // Έλεγχος αν υπάρχει προσφορά και εισαγωγή ή ενημέρωση αυτής
                 if (mysqli_num_rows($result) == 0) {
                 // Προετοιμασία για εισαγωγή της νέας προσφοράς στη Βάση Δεδομένων
                 $sql = "INSERT INTO offers (UserID, FuelID, ExpirationDate, Price) VALUES ('$user_id', '$fuel_id', '$date', '$price')";
@@ -206,8 +210,6 @@
                 }
                 }
 
-                
-                
                 $conn->close();     
             }
         ?>

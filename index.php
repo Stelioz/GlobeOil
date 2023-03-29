@@ -60,7 +60,6 @@
             </section>
         </header>
         
-        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
         <?php
             // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
             $conn = mysqli_connect("localhost", "root", "password");
@@ -79,8 +78,7 @@
                 die("Το ερώτημα απέτυχε!");
             }
         
-            /* Ζητάμε τη μέγιστη, τη μέση και την ελάχιστη τιμή για κάθε τύπο καυσίμου
-            επιλέγοντας την στήλη "Price" και με διακριτικό το "FuelID" */
+            // Ζητάμε τη μέγιστη, τη μέση και την ελάχιστη τιμή για κάθε τύπο καυσίμου
             // Μέγιστη τιμή
             $sql_max95 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 1";
             $sql_max98 = "SELECT MAX(Price) AS max_value FROM offers WHERE FuelID = 2";

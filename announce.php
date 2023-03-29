@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Αρχικοποίηση Σελίδας στον Browser -->
     <title> Globe Oil </title> <!-- Τίτλος Σελίδας -->
     <link rel="stylesheet" href="css/announce.css"> <!-- Σύνδεση με την CSS -->
-    
+    <!-- Κώδικας της JavaScript για διαγραφή ανακοίνωσης -->
     <script src="Scripts/deleteAnnounce.js"></script>
+    <!-- Κώδικας της JavaScript για δημιουργία νέας ανακοίνωσης -->
     <script src="Scripts/createAnnounce.js"></script>
     
 </head>
@@ -69,7 +70,6 @@
             </section>
         </header>
         
-        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
         <?php
             // Σύνδεση με τον Διακομιστή της Βάσης Δεδομέρων
             $conn = mysqli_connect("localhost", "root", "password");
@@ -133,7 +133,7 @@
   }
   ?>
 
-  <!-- The New Announcement form -->
+  <!-- Εμφάνιση φόρμας για δημιουργία νέας ανακοίνωσης -->
   <div id="announcementForm" class="form-popup" style="display:none">
     <form class="form-container" onsubmit="createAnnouncement(); return false;">
       <h1>New Announcement</h1>
@@ -147,12 +147,8 @@
       <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
     </form>
   </div>
-
-</section>
-
-
-
-            
+  </section>
+        <br><br>
         <footer>
             <span class="left-text"><a href="C:\Users\steal\Documents\Visual Code\HTML Projects\Globe Oil\Pdf\Oroi.pdf" target="_blank"> « Όροι Χρήσης »</a></span>
             <span class="separator">|</span>

@@ -60,7 +60,6 @@
             </section>
         </header>
         
-        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
         <?php           
             $conn = mysqli_connect("localhost", "root", "password");
             if (!$conn) {

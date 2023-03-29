@@ -64,6 +64,7 @@
             <h1>Είσοδος Χρήστη</h1>
             <hr>
         </section>
+        <!-- Φόρμα καταχώρησης στοιχείων για την είσοδο του χρήστη -->
         <form action="Scripts/loginCheck.php" method="post">
             <div class="name">
                 <span class="left-item"><label for="username">Όνομα Χρήστη :</label></span>
@@ -84,13 +85,14 @@
             </div>
         </form>
         <br>
+        <!-- Μεταφορά του χρήστη στην Σελίδα Εγγραφής Επιχείρησης -->
         <div class="text">
             <span class="right-text"></span>
             <span class="center-item"><a href="register.php">Εγγραφή Νέας Επιχείρησης</a></span>
             <span class="right-item"></span>
         </div>
         <br><br>
-        
+
         <footer>
             <span class="left-text"><a href="C:\Users\steal\Documents\Visual Code\HTML Projects\Globe Oil\Pdf\Oroi.pdf" target="_blank"> « Όροι Χρήσης »</a></span>
             <span class="separator">|</span>

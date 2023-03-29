@@ -64,7 +64,6 @@
             </section>
         </header>
         
-        <!-- PHP για σύνδεση με τη Βάση Δεδομένων -->
         <?php           
             $conn = mysqli_connect("localhost", "root", "password");
             if (!$conn) {
@@ -101,7 +100,7 @@
             <hr>
         </section>
         
-        <!-- Φόρμα καταχώρησης χρήστη -->
+        <!-- Φόρμα καταχώρησης χρήστη, γίνεται κλήση των validateVAT και validateForm -->
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" id="myForm" onsubmit="return validateVAT() && validateForm()">
             <div class="BrandName">
                 <span class="left-item"> Επωνυμία Επιχείρησης: </span>

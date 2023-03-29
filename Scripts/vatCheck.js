@@ -1,5 +1,5 @@
 function validateVAT() {
-  // Αντιστοίχιση της μεταβλητής VAT με τη φόρμα της HTML  
+  // Αντιστοίχιση της μεταβλητής VAT με τη φόρμα  
   var vat = document.getElementsByName("VAT")[0].value;
   
   // Δημιουργία XMLHttpRequest αντικειμένου για τον έλεγχο του ΑΦΜ

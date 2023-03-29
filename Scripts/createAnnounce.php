@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $text = $_POST['text'];
 
 
-    // Code to insert announcement when form is submitted
+    // Eισάγωγή της ανακοίνωσης κατά την υποβολή της φόρμας
     if (isset($_POST['title']) && isset($_POST['text'])) {
     $title = $_POST['title'];
     $text = $_POST['text'];
@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     }
   
-
     mysqli_close($conn);
     exit;
 }
