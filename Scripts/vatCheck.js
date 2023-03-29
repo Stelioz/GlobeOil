@@ -21,7 +21,7 @@ function validateVAT() {
   xmlhttp_vat.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       if (this.responseText == "exists") {
-        alert("Ο ΑΦΜ που εισάγατε υπάρχει ήδη στη βάση δεδομένων!");
+        alert("Ο ΑΦΜ που εισάγατε υπάρχει ήδη! Ελέξτε την ορθότητα των στοιχείων σας ή επικοινωνήστε με τον διαχειρηστή στο email: std142714@ac.eap.gr");
         return false;
       }
     }
